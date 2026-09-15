@@ -105,7 +105,10 @@ function CreditosPage() {
               disabled={!can("write")}
               onClick={async () => {
                 const value = Number(amount || 0);
-                if (value <= 0) return toast.error("Informe um valor de compra.");
+                if (value <= 0) {
+                  toast.error("Informe um valor de compra.");
+                  return;
+                }
                 const res = await creditService.purchase(value, method);
                 toast.success(`Compra simulada de ${brl(value)} via ${method}`, {
                   description: `Protocolo ${res.protocol}. Nenhum pagamento real foi processado.`,

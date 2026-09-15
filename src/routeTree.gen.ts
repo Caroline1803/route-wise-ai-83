@@ -13,7 +13,11 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as PlanejarRouteImport } from './routes/planejar'
 import { Route as RhRouteImport } from './routes/rh'
 import { Route as RhIndexRouteImport } from './routes/rh.index'
+import { Route as RhCreditosRouteImport } from './routes/rh.creditos'
+import { Route as RhPoliticasRouteImport } from './routes/rh.politicas'
 import { Route as ApiMobilitySearchRouteImport } from './routes/api/mobility/search'
+import { Route as RhColaboradoresIndexRouteImport } from './routes/rh.colaboradores.index'
+import { Route as RhColaboradoresIdRouteImport } from './routes/rh.colaboradores.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -35,39 +39,98 @@ const RhIndexRoute = RhIndexRouteImport.update({
   path: '/',
   getParentRoute: () => RhRoute,
 } as any)
+const RhCreditosRoute = RhCreditosRouteImport.update({
+  id: '/creditos',
+  path: '/creditos',
+  getParentRoute: () => RhRoute,
+} as any)
+const RhPoliticasRoute = RhPoliticasRouteImport.update({
+  id: '/politicas',
+  path: '/politicas',
+  getParentRoute: () => RhRoute,
+} as any)
 const ApiMobilitySearchRoute = ApiMobilitySearchRouteImport.update({
   id: '/api/mobility/search',
   path: '/api/mobility/search',
   getParentRoute: () => rootRouteImport,
+} as any)
+const RhColaboradoresIndexRoute = RhColaboradoresIndexRouteImport.update({
+  id: '/colaboradores/',
+  path: '/colaboradores/',
+  getParentRoute: () => RhRoute,
+} as any)
+const RhColaboradoresIdRoute = RhColaboradoresIdRouteImport.update({
+  id: '/colaboradores/$id',
+  path: '/colaboradores/$id',
+  getParentRoute: () => RhRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/planejar': typeof PlanejarRoute
   '/rh': typeof RhRouteWithChildren
+  '/rh/creditos': typeof RhCreditosRoute
+  '/rh/politicas': typeof RhPoliticasRoute
   '/rh/': typeof RhIndexRoute
   '/api/mobility/search': typeof ApiMobilitySearchRoute
+  '/rh/colaboradores/$id': typeof RhColaboradoresIdRoute
+  '/rh/colaboradores/': typeof RhColaboradoresIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/planejar': typeof PlanejarRoute
+  '/rh/creditos': typeof RhCreditosRoute
+  '/rh/politicas': typeof RhPoliticasRoute
   '/rh': typeof RhIndexRoute
   '/api/mobility/search': typeof ApiMobilitySearchRoute
+  '/rh/colaboradores/$id': typeof RhColaboradoresIdRoute
+  '/rh/colaboradores': typeof RhColaboradoresIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/planejar': typeof PlanejarRoute
   '/rh': typeof RhRouteWithChildren
+  '/rh/creditos': typeof RhCreditosRoute
+  '/rh/politicas': typeof RhPoliticasRoute
   '/rh/': typeof RhIndexRoute
   '/api/mobility/search': typeof ApiMobilitySearchRoute
+  '/rh/colaboradores/$id': typeof RhColaboradoresIdRoute
+  '/rh/colaboradores/': typeof RhColaboradoresIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/planejar' | '/rh' | '/rh/' | '/api/mobility/search'
+  fullPaths:
+    | '/'
+    | '/planejar'
+    | '/rh'
+    | '/rh/creditos'
+    | '/rh/politicas'
+    | '/rh/'
+    | '/api/mobility/search'
+    | '/rh/colaboradores/$id'
+    | '/rh/colaboradores/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/planejar' | '/rh' | '/api/mobility/search'
-  id: '__root__' | '/' | '/planejar' | '/rh' | '/rh/' | '/api/mobility/search'
+  to:
+    | '/'
+    | '/planejar'
+    | '/rh/creditos'
+    | '/rh/politicas'
+    | '/rh'
+    | '/api/mobility/search'
+    | '/rh/colaboradores/$id'
+    | '/rh/colaboradores'
+  id:
+    | '__root__'
+    | '/'
+    | '/planejar'
+    | '/rh'
+    | '/rh/creditos'
+    | '/rh/politicas'
+    | '/rh/'
+    | '/api/mobility/search'
+    | '/rh/colaboradores/$id'
+    | '/rh/colaboradores/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -107,6 +170,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RhIndexRouteImport
       parentRoute: typeof RhRoute
     }
+    '/rh/creditos': {
+      id: '/rh/creditos'
+      path: '/creditos'
+      fullPath: '/rh/creditos'
+      preLoaderRoute: typeof RhCreditosRouteImport
+      parentRoute: typeof RhRoute
+    }
+    '/rh/politicas': {
+      id: '/rh/politicas'
+      path: '/politicas'
+      fullPath: '/rh/politicas'
+      preLoaderRoute: typeof RhPoliticasRouteImport
+      parentRoute: typeof RhRoute
+    }
     '/api/mobility/search': {
       id: '/api/mobility/search'
       path: '/api/mobility/search'
@@ -114,15 +191,37 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiMobilitySearchRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/rh/colaboradores/': {
+      id: '/rh/colaboradores/'
+      path: '/colaboradores'
+      fullPath: '/rh/colaboradores/'
+      preLoaderRoute: typeof RhColaboradoresIndexRouteImport
+      parentRoute: typeof RhRoute
+    }
+    '/rh/colaboradores/$id': {
+      id: '/rh/colaboradores/$id'
+      path: '/colaboradores/$id'
+      fullPath: '/rh/colaboradores/$id'
+      preLoaderRoute: typeof RhColaboradoresIdRouteImport
+      parentRoute: typeof RhRoute
+    }
   }
 }
 
 interface RhRouteChildren {
+  RhCreditosRoute: typeof RhCreditosRoute
+  RhPoliticasRoute: typeof RhPoliticasRoute
   RhIndexRoute: typeof RhIndexRoute
+  RhColaboradoresIdRoute: typeof RhColaboradoresIdRoute
+  RhColaboradoresIndexRoute: typeof RhColaboradoresIndexRoute
 }
 
 const RhRouteChildren: RhRouteChildren = {
+  RhCreditosRoute: RhCreditosRoute,
+  RhPoliticasRoute: RhPoliticasRoute,
   RhIndexRoute: RhIndexRoute,
+  RhColaboradoresIdRoute: RhColaboradoresIdRoute,
+  RhColaboradoresIndexRoute: RhColaboradoresIndexRoute,
 }
 
 const RhRouteWithChildren = RhRoute._addFileChildren(RhRouteChildren)

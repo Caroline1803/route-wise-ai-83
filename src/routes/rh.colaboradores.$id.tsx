@@ -194,7 +194,10 @@ function EmployeeProfile() {
                   variant="outline"
                   onClick={() => {
                     const v = Number(limit);
-                    if (!v) return toast.error("Informe um valor válido.");
+                    if (!v) {
+                      toast.error("Informe um valor válido.");
+                      return;
+                    }
                     void employeeService.updateLimit(employee.id, v);
                     toast.success(`Novo limite simulado: ${brl(v)}`);
                   }}

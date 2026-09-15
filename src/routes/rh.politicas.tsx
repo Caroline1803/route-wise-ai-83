@@ -86,7 +86,10 @@ function PoliticasPage() {
                 <DialogFooter>
                   <Button
                     onClick={async () => {
-                      if (!name.trim()) return toast.error("Informe o nome da política.");
+                      if (!name.trim()) {
+                        toast.error("Informe o nome da política.");
+                        return;
+                      }
                       await policyService.create({
                         name,
                         active: true,
