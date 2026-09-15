@@ -1,17 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { SiteHeader } from "@/components/mobility/SiteHeader";
 import { OptionCard } from "@/components/mobility/OptionCard";
 import { MobilityRecommendation } from "@/components/mobility/MobilityRecommendation";
 import { AddressAutocomplete } from "@/components/maps/AddressAutocomplete";
 import { CurrentLocationButton } from "@/components/maps/CurrentLocationButton";
-import { RouteMap } from "@/components/maps/RouteMap";
 import { RouteSummary } from "@/components/maps/RouteSummary";
 import { searchMobility } from "@/lib/mobility/search.functions";
 import { computeRoute } from "@/lib/maps/maps.functions";
-import type { MobilityOption, Modal, SearchResponse } from "@/lib/mobility/types";
-import type { RouteResult, SelectedPlace, TravelMode } from "@/lib/maps/types";
+import type { MobilityOption, SearchResponse } from "@/lib/mobility/types";
+import type { RouteResult, SelectedPlace } from "@/lib/maps/types";
 import mobilityNetwork from "@/assets/mobility-network-night.jpg";
 import { Button } from "@/components/ui/button";
 
@@ -22,7 +21,7 @@ export const Route = createFileRoute("/planejar")({
       {
         name: "description",
         content:
-          "Busque endereços reais no mapa e compare metrô, ônibus, trem, bicicleta e carro por app com preço, tempo, cashback e política da empresa.",
+          "Busque endereços reais e compare metrô, ônibus, trem, bicicleta e carro por app com preço, tempo, cashback e política da empresa.",
       },
       { property: "og:title", content: "Planejar viagem multimodal" },
       {
@@ -48,20 +47,11 @@ const FILTERS: { key: FilterKey; label: string }[] = [
 
 const STEPS = [
   "Localizando origem e destino",
-  "Calculando rota no Google Maps",
+  "Calculando distância e duração",
   "Consultando opções de mobilidade",
   "Aplicando política corporativa",
   "Calculando recomendação",
 ];
-
-const MODE_BY_MODAL: Record<Modal, TravelMode> = {
-  RIDE_HAILING: "DRIVE",
-  BUS: "TRANSIT",
-  METRO: "TRANSIT",
-  TRAIN: "TRANSIT",
-  BIKE: "BICYCLE",
-  MULTIMODAL: "TRANSIT",
-};
 
 const brl = (v: number) => `R$ ${v.toFixed(2).replace(".", ",")}`;
 
@@ -93,7 +83,6 @@ function Planejar() {
   const [error, setError] = useState<string | null>(null);
   const [loadingStep, setLoadingStep] = useState(-1);
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [optionPolyline, setOptionPolyline] = useState<string | null>(null);
 
   const loading = loadingStep >= 0;
 
@@ -102,7 +91,6 @@ function Planejar() {
     setError(null);
     setData(null);
     setSelectedId(null);
-    setOptionPolyline(null);
     setLoadingStep(0);
     try {
       setLoadingStep(1);
@@ -138,36 +126,6 @@ function Planejar() {
     }
   };
 
-  const selectedOption = useMemo(
-    () => data?.options.find((o) => o.id === selectedId) ?? null,
-    [data, selectedId],
-  );
-
-  /** Ao escolher uma opção, o mapa mostra o trajeto real daquele modal. */
-  const loadOptionPath = useCallback(
-    async (option: MobilityOption) => {
-      if (!origin || !destination) return;
-      try {
-        const result = await route({
-          data: { origin, destination, travelMode: MODE_BY_MODAL[option.modal] },
-        });
-        setOptionPolyline(result.encodedPolyline ?? null);
-      } catch {
-        setOptionPolyline(routeResult?.encodedPolyline ?? null);
-      }
-    },
-    [origin, destination, route, routeResult],
-  );
-
-  useEffect(() => {
-    if (selectedOption) void loadOptionPath(selectedOption);
-  }, [selectedOption, loadOptionPath]);
-
-  const paths = useMemo(() => {
-    const encoded = optionPolyline ?? routeResult?.encodedPolyline;
-    return encoded ? [{ encodedPolyline: encoded, color: "#0d9488" }] : [];
-  }, [optionPolyline, routeResult]);
-
   const sorted = useMemo(
     () => (data ? sortOptions(data.options, filter) : []),
     [data, filter],
@@ -185,7 +143,7 @@ function Planejar() {
           <div className="relative z-10 flex min-h-56 max-w-2xl flex-col justify-center p-7 sm:p-9">
             <p className="mb-3 flex items-center gap-2 text-xs font-semibold text-primary"><span className="signal-pulse h-2 w-2 rounded-full bg-primary" /> ROTAS CONECTADAS</p>
             <h1 className="text-3xl font-bold text-foreground">Planejar viagem</h1>
-            <p className="mt-2 text-sm text-muted-foreground">Informe endereços reais, veja o percurso no mapa e compare todas as alternativas de mobilidade.</p>
+            <p className="mt-2 text-sm text-muted-foreground">Informe endereços reais e compare todas as alternativas de mobilidade.</p>
           </div>
         </section>
 
@@ -232,10 +190,6 @@ function Planejar() {
             {error}
           </p>
         )}
-
-        <section className="mt-6">
-          <RouteMap origin={origin} destination={destination} paths={paths} />
-        </section>
 
         {routeResult && (
           <div className="mt-6">
