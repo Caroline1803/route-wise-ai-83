@@ -63,7 +63,7 @@ export class NinetyNineMockProvider implements MobilityProvider {
     ];
   }
 
-  async getAvailability(): Promise<Availability> {
+  async getAvailability(_location?: Location): Promise<Availability> {
     return { available: true, dataSource: "MOCK" };
   }
 

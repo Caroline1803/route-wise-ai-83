@@ -74,7 +74,7 @@ export class UberMockProvider implements MobilityProvider {
     return [make("UberX", 1, 0, 1), make("Uber Comfort", 1.32, 2, 2)];
   }
 
-  async getAvailability(): Promise<Availability> {
+  async getAvailability(_location?: Location): Promise<Availability> {
     return { available: true, details: "Carros na região", dataSource: "MOCK" };
   }
 
