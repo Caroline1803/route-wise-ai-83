@@ -10,11 +10,17 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as PlanejarRouteImport } from './routes/planejar'
 import { Route as ApiMobilitySearchRouteImport } from './routes/api/mobility/search'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PlanejarRoute = PlanejarRouteImport.update({
+  id: '/planejar',
+  path: '/planejar',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiMobilitySearchRoute = ApiMobilitySearchRouteImport.update({
@@ -25,27 +31,31 @@ const ApiMobilitySearchRoute = ApiMobilitySearchRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/planejar': typeof PlanejarRoute
   '/api/mobility/search': typeof ApiMobilitySearchRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/planejar': typeof PlanejarRoute
   '/api/mobility/search': typeof ApiMobilitySearchRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/planejar': typeof PlanejarRoute
   '/api/mobility/search': typeof ApiMobilitySearchRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/api/mobility/search'
+  fullPaths: '/' | '/planejar' | '/api/mobility/search'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/api/mobility/search'
-  id: '__root__' | '/' | '/api/mobility/search'
+  to: '/' | '/planejar' | '/api/mobility/search'
+  id: '__root__' | '/' | '/planejar' | '/api/mobility/search'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  PlanejarRoute: typeof PlanejarRoute
   ApiMobilitySearchRoute: typeof ApiMobilitySearchRoute
 }
 
@@ -56,6 +66,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/planejar': {
+      id: '/planejar'
+      path: '/planejar'
+      fullPath: '/planejar'
+      preLoaderRoute: typeof PlanejarRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/mobility/search': {
@@ -70,6 +87,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  PlanejarRoute: PlanejarRoute,
   ApiMobilitySearchRoute: ApiMobilitySearchRoute,
 }
 export const routeTree = rootRouteImport
