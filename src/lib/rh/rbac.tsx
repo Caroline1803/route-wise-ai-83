@@ -104,7 +104,7 @@ export function RhSessionProvider({
         userName: "Caroline Martins",
         role,
         company,
-        department: role === "GESTOR" ? "Tecnologia" : undefined,
+        ...(role === "GESTOR" ? { department: "Tecnologia" } : {}),
       },
       setRole,
       can: (permission) => ROLE_PERMISSIONS[role].includes(permission),
