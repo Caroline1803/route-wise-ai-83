@@ -15,9 +15,11 @@ const brl = (v: number) => `R$ ${v.toFixed(2).replace(".", ",")}`;
 export function OptionCard({
   option,
   highlighted = false,
+  selected = false,
 }: {
   option: MobilityOption;
   highlighted?: boolean;
+  selected?: boolean;
 }) {
   return (
     <article
@@ -25,7 +27,7 @@ export function OptionCard({
         highlighted
           ? "border-primary/40 bg-card shadow-glow"
           : "border-border bg-card hover:shadow-soft"
-      } ${option.available ? "" : "opacity-60"}`}
+      } ${selected ? "ring-2 ring-ring" : ""} ${option.available ? "" : "opacity-60"}`}
     >
       <header className="flex items-start justify-between gap-3">
         <div className="flex items-start gap-3">
