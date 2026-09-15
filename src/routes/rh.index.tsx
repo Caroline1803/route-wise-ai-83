@@ -70,7 +70,6 @@ function RhDashboard() {
     queryFn: () => rhDashboardService.getSpendHistory(months),
   });
 
-  console.log("DASH_STATE", typeof window, !!data, !!history);
   if (!data) {
     return <div className="h-64 animate-pulse rounded-2xl border border-border bg-card" />;
   }
