@@ -10,33 +10,63 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as PlanejarRouteImport } from './routes/planejar'
+import { Route as RhRouteImport } from './routes/rh'
+import { Route as ApiMobilitySearchRouteImport } from './routes/api/mobility/search'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PlanejarRoute = PlanejarRouteImport.update({
+  id: '/planejar',
+  path: '/planejar',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RhRoute = RhRouteImport.update({
+  id: '/rh',
+  path: '/rh',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiMobilitySearchRoute = ApiMobilitySearchRouteImport.update({
+  id: '/api/mobility/search',
+  path: '/api/mobility/search',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/planejar': typeof PlanejarRoute
+  '/rh': typeof RhRoute
+  '/api/mobility/search': typeof ApiMobilitySearchRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/planejar': typeof PlanejarRoute
+  '/rh': typeof RhRoute
+  '/api/mobility/search': typeof ApiMobilitySearchRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/planejar': typeof PlanejarRoute
+  '/rh': typeof RhRoute
+  '/api/mobility/search': typeof ApiMobilitySearchRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/planejar' | '/rh' | '/api/mobility/search'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/planejar' | '/rh' | '/api/mobility/search'
+  id: '__root__' | '/' | '/planejar' | '/rh' | '/api/mobility/search'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  PlanejarRoute: typeof PlanejarRoute
+  RhRoute: typeof RhRoute
+  ApiMobilitySearchRoute: typeof ApiMobilitySearchRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +78,35 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/planejar': {
+      id: '/planejar'
+      path: '/planejar'
+      fullPath: '/planejar'
+      preLoaderRoute: typeof PlanejarRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/rh': {
+      id: '/rh'
+      path: '/rh'
+      fullPath: '/rh'
+      preLoaderRoute: typeof RhRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/mobility/search': {
+      id: '/api/mobility/search'
+      path: '/api/mobility/search'
+      fullPath: '/api/mobility/search'
+      preLoaderRoute: typeof ApiMobilitySearchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  PlanejarRoute: PlanejarRoute,
+  RhRoute: RhRoute,
+  ApiMobilitySearchRoute: ApiMobilitySearchRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
