@@ -13,11 +13,15 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as PlanejarRouteImport } from './routes/planejar'
 import { Route as RhRouteImport } from './routes/rh'
 import { Route as RhIndexRouteImport } from './routes/rh.index'
+import { Route as RhCashbackRouteImport } from './routes/rh.cashback'
+import { Route as RhConfiguracoesRouteImport } from './routes/rh.configuracoes'
 import { Route as RhCreditosRouteImport } from './routes/rh.creditos'
 import { Route as RhEsgRouteImport } from './routes/rh.esg'
+import { Route as RhIntegracoesRouteImport } from './routes/rh.integracoes'
 import { Route as RhIntelligenceRouteImport } from './routes/rh.intelligence'
 import { Route as RhMobilidadeRouteImport } from './routes/rh.mobilidade'
 import { Route as RhPoliticasRouteImport } from './routes/rh.politicas'
+import { Route as RhRelatoriosRouteImport } from './routes/rh.relatorios'
 import { Route as RhTransacoesRouteImport } from './routes/rh.transacoes'
 import { Route as ApiMobilitySearchRouteImport } from './routes/api/mobility/search'
 import { Route as RhColaboradoresIndexRouteImport } from './routes/rh.colaboradores.index'
@@ -43,6 +47,16 @@ const RhIndexRoute = RhIndexRouteImport.update({
   path: '/',
   getParentRoute: () => RhRoute,
 } as any)
+const RhCashbackRoute = RhCashbackRouteImport.update({
+  id: '/cashback',
+  path: '/cashback',
+  getParentRoute: () => RhRoute,
+} as any)
+const RhConfiguracoesRoute = RhConfiguracoesRouteImport.update({
+  id: '/configuracoes',
+  path: '/configuracoes',
+  getParentRoute: () => RhRoute,
+} as any)
 const RhCreditosRoute = RhCreditosRouteImport.update({
   id: '/creditos',
   path: '/creditos',
@@ -51,6 +65,11 @@ const RhCreditosRoute = RhCreditosRouteImport.update({
 const RhEsgRoute = RhEsgRouteImport.update({
   id: '/esg',
   path: '/esg',
+  getParentRoute: () => RhRoute,
+} as any)
+const RhIntegracoesRoute = RhIntegracoesRouteImport.update({
+  id: '/integracoes',
+  path: '/integracoes',
   getParentRoute: () => RhRoute,
 } as any)
 const RhIntelligenceRoute = RhIntelligenceRouteImport.update({
@@ -66,6 +85,11 @@ const RhMobilidadeRoute = RhMobilidadeRouteImport.update({
 const RhPoliticasRoute = RhPoliticasRouteImport.update({
   id: '/politicas',
   path: '/politicas',
+  getParentRoute: () => RhRoute,
+} as any)
+const RhRelatoriosRoute = RhRelatoriosRouteImport.update({
+  id: '/relatorios',
+  path: '/relatorios',
   getParentRoute: () => RhRoute,
 } as any)
 const RhTransacoesRoute = RhTransacoesRouteImport.update({
@@ -93,11 +117,15 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/planejar': typeof PlanejarRoute
   '/rh': typeof RhRouteWithChildren
+  '/rh/cashback': typeof RhCashbackRoute
+  '/rh/configuracoes': typeof RhConfiguracoesRoute
   '/rh/creditos': typeof RhCreditosRoute
   '/rh/esg': typeof RhEsgRoute
+  '/rh/integracoes': typeof RhIntegracoesRoute
   '/rh/intelligence': typeof RhIntelligenceRoute
   '/rh/mobilidade': typeof RhMobilidadeRoute
   '/rh/politicas': typeof RhPoliticasRoute
+  '/rh/relatorios': typeof RhRelatoriosRoute
   '/rh/transacoes': typeof RhTransacoesRoute
   '/rh/': typeof RhIndexRoute
   '/api/mobility/search': typeof ApiMobilitySearchRoute
@@ -107,11 +135,15 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/planejar': typeof PlanejarRoute
+  '/rh/cashback': typeof RhCashbackRoute
+  '/rh/configuracoes': typeof RhConfiguracoesRoute
   '/rh/creditos': typeof RhCreditosRoute
   '/rh/esg': typeof RhEsgRoute
+  '/rh/integracoes': typeof RhIntegracoesRoute
   '/rh/intelligence': typeof RhIntelligenceRoute
   '/rh/mobilidade': typeof RhMobilidadeRoute
   '/rh/politicas': typeof RhPoliticasRoute
+  '/rh/relatorios': typeof RhRelatoriosRoute
   '/rh/transacoes': typeof RhTransacoesRoute
   '/rh': typeof RhIndexRoute
   '/api/mobility/search': typeof ApiMobilitySearchRoute
@@ -123,11 +155,15 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/planejar': typeof PlanejarRoute
   '/rh': typeof RhRouteWithChildren
+  '/rh/cashback': typeof RhCashbackRoute
+  '/rh/configuracoes': typeof RhConfiguracoesRoute
   '/rh/creditos': typeof RhCreditosRoute
   '/rh/esg': typeof RhEsgRoute
+  '/rh/integracoes': typeof RhIntegracoesRoute
   '/rh/intelligence': typeof RhIntelligenceRoute
   '/rh/mobilidade': typeof RhMobilidadeRoute
   '/rh/politicas': typeof RhPoliticasRoute
+  '/rh/relatorios': typeof RhRelatoriosRoute
   '/rh/transacoes': typeof RhTransacoesRoute
   '/rh/': typeof RhIndexRoute
   '/api/mobility/search': typeof ApiMobilitySearchRoute
@@ -140,11 +176,15 @@ export interface FileRouteTypes {
     | '/'
     | '/planejar'
     | '/rh'
+    | '/rh/cashback'
+    | '/rh/configuracoes'
     | '/rh/creditos'
     | '/rh/esg'
+    | '/rh/integracoes'
     | '/rh/intelligence'
     | '/rh/mobilidade'
     | '/rh/politicas'
+    | '/rh/relatorios'
     | '/rh/transacoes'
     | '/rh/'
     | '/api/mobility/search'
@@ -154,11 +194,15 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/planejar'
+    | '/rh/cashback'
+    | '/rh/configuracoes'
     | '/rh/creditos'
     | '/rh/esg'
+    | '/rh/integracoes'
     | '/rh/intelligence'
     | '/rh/mobilidade'
     | '/rh/politicas'
+    | '/rh/relatorios'
     | '/rh/transacoes'
     | '/rh'
     | '/api/mobility/search'
@@ -169,11 +213,15 @@ export interface FileRouteTypes {
     | '/'
     | '/planejar'
     | '/rh'
+    | '/rh/cashback'
+    | '/rh/configuracoes'
     | '/rh/creditos'
     | '/rh/esg'
+    | '/rh/integracoes'
     | '/rh/intelligence'
     | '/rh/mobilidade'
     | '/rh/politicas'
+    | '/rh/relatorios'
     | '/rh/transacoes'
     | '/rh/'
     | '/api/mobility/search'
@@ -218,6 +266,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RhIndexRouteImport
       parentRoute: typeof RhRoute
     }
+    '/rh/cashback': {
+      id: '/rh/cashback'
+      path: '/cashback'
+      fullPath: '/rh/cashback'
+      preLoaderRoute: typeof RhCashbackRouteImport
+      parentRoute: typeof RhRoute
+    }
+    '/rh/configuracoes': {
+      id: '/rh/configuracoes'
+      path: '/configuracoes'
+      fullPath: '/rh/configuracoes'
+      preLoaderRoute: typeof RhConfiguracoesRouteImport
+      parentRoute: typeof RhRoute
+    }
     '/rh/creditos': {
       id: '/rh/creditos'
       path: '/creditos'
@@ -230,6 +292,13 @@ declare module '@tanstack/react-router' {
       path: '/esg'
       fullPath: '/rh/esg'
       preLoaderRoute: typeof RhEsgRouteImport
+      parentRoute: typeof RhRoute
+    }
+    '/rh/integracoes': {
+      id: '/rh/integracoes'
+      path: '/integracoes'
+      fullPath: '/rh/integracoes'
+      preLoaderRoute: typeof RhIntegracoesRouteImport
       parentRoute: typeof RhRoute
     }
     '/rh/intelligence': {
@@ -251,6 +320,13 @@ declare module '@tanstack/react-router' {
       path: '/politicas'
       fullPath: '/rh/politicas'
       preLoaderRoute: typeof RhPoliticasRouteImport
+      parentRoute: typeof RhRoute
+    }
+    '/rh/relatorios': {
+      id: '/rh/relatorios'
+      path: '/relatorios'
+      fullPath: '/rh/relatorios'
+      preLoaderRoute: typeof RhRelatoriosRouteImport
       parentRoute: typeof RhRoute
     }
     '/rh/transacoes': {
@@ -285,11 +361,15 @@ declare module '@tanstack/react-router' {
 }
 
 interface RhRouteChildren {
+  RhCashbackRoute: typeof RhCashbackRoute
+  RhConfiguracoesRoute: typeof RhConfiguracoesRoute
   RhCreditosRoute: typeof RhCreditosRoute
   RhEsgRoute: typeof RhEsgRoute
+  RhIntegracoesRoute: typeof RhIntegracoesRoute
   RhIntelligenceRoute: typeof RhIntelligenceRoute
   RhMobilidadeRoute: typeof RhMobilidadeRoute
   RhPoliticasRoute: typeof RhPoliticasRoute
+  RhRelatoriosRoute: typeof RhRelatoriosRoute
   RhTransacoesRoute: typeof RhTransacoesRoute
   RhIndexRoute: typeof RhIndexRoute
   RhColaboradoresIdRoute: typeof RhColaboradoresIdRoute
@@ -297,11 +377,15 @@ interface RhRouteChildren {
 }
 
 const RhRouteChildren: RhRouteChildren = {
+  RhCashbackRoute: RhCashbackRoute,
+  RhConfiguracoesRoute: RhConfiguracoesRoute,
   RhCreditosRoute: RhCreditosRoute,
   RhEsgRoute: RhEsgRoute,
+  RhIntegracoesRoute: RhIntegracoesRoute,
   RhIntelligenceRoute: RhIntelligenceRoute,
   RhMobilidadeRoute: RhMobilidadeRoute,
   RhPoliticasRoute: RhPoliticasRoute,
+  RhRelatoriosRoute: RhRelatoriosRoute,
   RhTransacoesRoute: RhTransacoesRoute,
   RhIndexRoute: RhIndexRoute,
   RhColaboradoresIdRoute: RhColaboradoresIdRoute,
