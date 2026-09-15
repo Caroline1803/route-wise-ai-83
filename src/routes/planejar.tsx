@@ -1,12 +1,17 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useMutation } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { SiteHeader } from "@/components/mobility/SiteHeader";
 import { OptionCard } from "@/components/mobility/OptionCard";
+import { MobilityRecommendation } from "@/components/mobility/MobilityRecommendation";
+import { AddressAutocomplete } from "@/components/maps/AddressAutocomplete";
+import { CurrentLocationButton } from "@/components/maps/CurrentLocationButton";
+import { RouteMap } from "@/components/maps/RouteMap";
+import { RouteSummary } from "@/components/maps/RouteSummary";
 import { searchMobility } from "@/lib/mobility/search.functions";
-import { PLACES } from "@/lib/mobility/places";
-import type { MobilityOption, SearchResponse } from "@/lib/mobility/types";
+import { computeRoute } from "@/lib/maps/maps.functions";
+import type { MobilityOption, Modal, SearchResponse } from "@/lib/mobility/types";
+import type { RouteResult, SelectedPlace, TravelMode } from "@/lib/maps/types";
 
 export const Route = createFileRoute("/planejar")({
   head: () => ({
@@ -15,12 +20,12 @@ export const Route = createFileRoute("/planejar")({
       {
         name: "description",
         content:
-          "Informe origem e destino e compare metrô, ônibus, trem, bicicleta e carro por app com preço, tempo, cashback e política da empresa.",
+          "Busque endereços reais no mapa e compare metrô, ônibus, trem, bicicleta e carro por app com preço, tempo, cashback e política da empresa.",
       },
       { property: "og:title", content: "Planejar viagem multimodal" },
       {
         property: "og:description",
-        content: "Compare todas as opções de mobilidade em uma única busca.",
+        content: "Endereços e rotas reais combinados com todas as opções de mobilidade.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -38,6 +43,23 @@ const FILTERS: { key: FilterKey; label: string }[] = [
   { key: "GREENEST", label: "Mais sustentável" },
   { key: "CASHBACK", label: "Maior cashback" },
 ];
+
+const STEPS = [
+  "Localizando origem e destino",
+  "Calculando rota no Google Maps",
+  "Consultando opções de mobilidade",
+  "Aplicando política corporativa",
+  "Calculando recomendação",
+];
+
+const MODE_BY_MODAL: Record<Modal, TravelMode> = {
+  RIDE_HAILING: "DRIVE",
+  BUS: "TRANSIT",
+  METRO: "TRANSIT",
+  TRAIN: "TRANSIT",
+  BIKE: "BICYCLE",
+  MULTIMODAL: "TRANSIT",
+};
 
 const brl = (v: number) => `R$ ${v.toFixed(2).replace(".", ",")}`;
 
@@ -59,28 +81,91 @@ function sortOptions(options: MobilityOption[], filter: FilterKey) {
 
 function Planejar() {
   const search = useServerFn(searchMobility);
-  const [originIdx, setOriginIdx] = useState(1);
-  const [destIdx, setDestIdx] = useState(3);
-  const [filter, setFilter] = useState<FilterKey>("BEST");
+  const route = useServerFn(computeRoute);
 
-  const mutation = useMutation<SearchResponse>({
-    mutationFn: async () => {
-      const origin = PLACES[originIdx]!;
-      const destination = PLACES[destIdx]!;
-      return search({
+  const [origin, setOrigin] = useState<SelectedPlace | null>(null);
+  const [destination, setDestination] = useState<SelectedPlace | null>(null);
+  const [routeResult, setRouteResult] = useState<RouteResult | null>(null);
+  const [data, setData] = useState<SearchResponse | null>(null);
+  const [filter, setFilter] = useState<FilterKey>("BEST");
+  const [error, setError] = useState<string | null>(null);
+  const [loadingStep, setLoadingStep] = useState(-1);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [optionPolyline, setOptionPolyline] = useState<string | null>(null);
+
+  const loading = loadingStep >= 0;
+
+  const handleSearch = async () => {
+    if (!origin || !destination) return;
+    setError(null);
+    setData(null);
+    setSelectedId(null);
+    setOptionPolyline(null);
+    setLoadingStep(0);
+    try {
+      setLoadingStep(1);
+      const real = await route({ data: { origin, destination, travelMode: "DRIVE" } });
+      setRouteResult(real);
+
+      setLoadingStep(2);
+      const response = await search({
         data: {
-          origin: { latitude: origin.latitude, longitude: origin.longitude },
+          origin: {
+            latitude: origin.latitude,
+            longitude: origin.longitude,
+            label: origin.formattedAddress,
+          },
           destination: {
             latitude: destination.latitude,
             longitude: destination.longitude,
+            label: destination.formattedAddress,
           },
           hourOfDay: new Date().getHours(),
         },
       });
-    },
-  });
+      setLoadingStep(4);
+      setData(response);
+      setSelectedId(response.recommended?.id ?? null);
+    } catch (e) {
+      setError(
+        (e as Error).message ||
+          "Não conseguimos calcular essa viagem agora. Verifique os endereços e tente novamente.",
+      );
+    } finally {
+      setLoadingStep(-1);
+    }
+  };
 
-  const data = mutation.data;
+  const selectedOption = useMemo(
+    () => data?.options.find((o) => o.id === selectedId) ?? null,
+    [data, selectedId],
+  );
+
+  /** Ao escolher uma opção, o mapa mostra o trajeto real daquele modal. */
+  const loadOptionPath = useCallback(
+    async (option: MobilityOption) => {
+      if (!origin || !destination) return;
+      try {
+        const result = await route({
+          data: { origin, destination, travelMode: MODE_BY_MODAL[option.modal] },
+        });
+        setOptionPolyline(result.encodedPolyline ?? null);
+      } catch {
+        setOptionPolyline(routeResult?.encodedPolyline ?? null);
+      }
+    },
+    [origin, destination, route, routeResult],
+  );
+
+  useEffect(() => {
+    if (selectedOption) void loadOptionPath(selectedOption);
+  }, [selectedOption, loadOptionPath]);
+
+  const paths = useMemo(() => {
+    const encoded = optionPolyline ?? routeResult?.encodedPolyline;
+    return encoded ? [{ encodedPolyline: encoded, color: "#0d9488" }] : [];
+  }, [optionPolyline, routeResult]);
+
   const sorted = useMemo(
     () => (data ? sortOptions(data.options, filter) : []),
     [data, filter],
@@ -94,61 +179,62 @@ function Planejar() {
       <main className="mx-auto max-w-4xl px-4 py-10">
         <h1 className="text-3xl font-bold text-foreground">Planejar viagem</h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          Escolha o trajeto e veja todas as alternativas de mobilidade em uma só tela.
+          Informe endereços reais, veja o percurso no mapa e compare todas as alternativas
+          de mobilidade.
         </p>
 
         <section className="mt-6 rounded-2xl border border-border bg-card p-6 shadow-soft">
           <div className="grid gap-4 sm:grid-cols-2">
-            <label className="block text-sm">
-              <span className="font-medium text-foreground">
-                De onde você está saindo?
-              </span>
-              <select
-                value={originIdx}
-                onChange={(e) => setOriginIdx(Number(e.target.value))}
-                className="mt-2 w-full rounded-xl border border-input bg-background px-3 py-2.5 text-foreground outline-none focus:ring-2 focus:ring-ring"
-              >
-                {PLACES.map((p, i) => (
-                  <option key={p.label} value={i}>
-                    {p.label}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <label className="block text-sm">
-              <span className="font-medium text-foreground">Para onde você vai?</span>
-              <select
-                value={destIdx}
-                onChange={(e) => setDestIdx(Number(e.target.value))}
-                className="mt-2 w-full rounded-xl border border-input bg-background px-3 py-2.5 text-foreground outline-none focus:ring-2 focus:ring-ring"
-              >
-                {PLACES.map((p, i) => (
-                  <option key={p.label} value={i}>
-                    {p.label}
-                  </option>
-                ))}
-              </select>
-            </label>
+            <div>
+              <AddressAutocomplete
+                label="De onde você está saindo?"
+                value={origin}
+                onSelect={setOrigin}
+                onError={setError}
+              />
+              <CurrentLocationButton onLocated={setOrigin} onError={setError} />
+            </div>
+            <AddressAutocomplete
+              label="Para onde você vai?"
+              value={destination}
+              onSelect={setDestination}
+              onError={setError}
+            />
           </div>
 
           <button
-            onClick={() => mutation.mutate()}
-            disabled={mutation.isPending || originIdx === destIdx}
+            onClick={() => void handleSearch()}
+            disabled={loading || !origin || !destination}
             className="mt-5 w-full rounded-xl bg-brand-gradient px-6 py-3 font-semibold text-primary-foreground shadow-glow transition-transform hover:-translate-y-0.5 disabled:opacity-50 disabled:hover:translate-y-0"
           >
-            {mutation.isPending ? "Buscando opções…" : "Buscar opções"}
+            {loading ? "Buscando as melhores opções para você…" : "Buscar opções"}
           </button>
-          {originIdx === destIdx && (
-            <p className="mt-2 text-center text-xs text-warning">
-              Escolha uma origem diferente do destino.
-            </p>
+
+          {loading && (
+            <ul className="mt-4 space-y-1 text-xs text-muted-foreground">
+              {STEPS.map((s, i) => (
+                <li key={s} className={i <= loadingStep ? "text-eco" : ""}>
+                  {i <= loadingStep ? "✓" : "•"} {s}
+                </li>
+              ))}
+            </ul>
           )}
         </section>
 
-        {mutation.isError && (
+        {error && (
           <p className="mt-6 rounded-xl border border-destructive/30 bg-destructive/10 p-4 text-sm text-destructive">
-            Não foi possível buscar as opções agora. Tente novamente.
+            {error}
           </p>
+        )}
+
+        <section className="mt-6">
+          <RouteMap origin={origin} destination={destination} paths={paths} />
+        </section>
+
+        {routeResult && (
+          <div className="mt-6">
+            <RouteSummary route={routeResult} />
+          </div>
         )}
 
         {data && (
@@ -176,21 +262,27 @@ function Planejar() {
             </div>
 
             {data.recommended && (
-              <section className="mt-6">
-                <h2 className="mb-3 text-sm font-semibold text-foreground">
-                  ✨ Recomendado pela MaaS AI
-                </h2>
-                <OptionCard option={data.recommended} highlighted />
-                <p className="mt-3 rounded-xl border border-border bg-accent/40 p-4 text-sm text-accent-foreground">
-                  <strong className="font-semibold">MaaS AI:</strong> {data.explanation}
-                </p>
-              </section>
+              <div className="mt-6">
+                <MobilityRecommendation
+                  option={data.recommended}
+                  explanation={data.explanation}
+                  selected={selectedId === data.recommended.id}
+                  onSelect={() => setSelectedId(data.recommended!.id)}
+                />
+              </div>
             )}
 
             <section className="mt-8 space-y-3">
               <h2 className="text-sm font-semibold text-foreground">Demais opções</h2>
               {rest.map((o) => (
-                <OptionCard key={o.id} option={o} />
+                <button
+                  key={o.id}
+                  type="button"
+                  onClick={() => setSelectedId(o.id)}
+                  className="block w-full text-left"
+                >
+                  <OptionCard option={o} selected={selectedId === o.id} />
+                </button>
               ))}
             </section>
 
@@ -205,6 +297,7 @@ function Planejar() {
                     {p.message ? ` · ${p.message}` : ""}
                   </li>
                 ))}
+                <li>🟢 GOOGLE_MAPS — LIVE · endereços, distância e rota reais</li>
               </ul>
             </section>
           </>
