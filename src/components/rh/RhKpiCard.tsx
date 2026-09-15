@@ -15,13 +15,13 @@ interface Props {
 export function RhKpiCard({ label, value, hint, delta, icon, accent = "default" }: Props) {
   const Arrow = delta && delta.value < 0 ? ArrowDownRight : ArrowUpRight;
   return (
-    <div className="rounded-2xl border border-border bg-card p-5 shadow-soft">
+    <div className="rounded-lg border border-border bg-card/90 p-5 shadow-soft backdrop-blur transition-colors hover:border-primary/35">
       <div className="flex items-start justify-between gap-3">
         <p className="text-xs font-medium text-muted-foreground">{label}</p>
         {icon ? (
           <span
             className={cn(
-              "grid h-8 w-8 place-items-center rounded-xl bg-secondary text-secondary-foreground",
+              "grid h-8 w-8 place-items-center rounded-md bg-secondary text-secondary-foreground",
               accent === "eco" && "bg-eco/15 text-eco",
               accent === "warning" && "bg-warning/15 text-warning",
             )}
