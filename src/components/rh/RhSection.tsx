@@ -12,7 +12,7 @@ interface Props {
 
 export function RhSection({ title, description, action, children, className }: Props) {
   return (
-    <section className={cn("rounded-2xl border border-border bg-card p-5 sm:p-6", className)}>
+    <section className={cn("rounded-lg border border-border bg-card/90 p-5 shadow-soft backdrop-blur sm:p-6", className)}>
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <h2 className="font-display text-base font-semibold text-foreground">{title}</h2>

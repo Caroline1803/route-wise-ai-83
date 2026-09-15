@@ -12,6 +12,8 @@ import { searchMobility } from "@/lib/mobility/search.functions";
 import { computeRoute } from "@/lib/maps/maps.functions";
 import type { MobilityOption, Modal, SearchResponse } from "@/lib/mobility/types";
 import type { RouteResult, SelectedPlace, TravelMode } from "@/lib/maps/types";
+import mobilityNetwork from "@/assets/mobility-network-night.jpg";
+import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/planejar")({
   head: () => ({
@@ -176,14 +178,18 @@ function Planejar() {
     <div className="min-h-screen bg-background">
       <SiteHeader />
 
-      <main className="mx-auto max-w-4xl px-4 py-10">
-        <h1 className="text-3xl font-bold text-foreground">Planejar viagem</h1>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Informe endereços reais, veja o percurso no mapa e compare todas as alternativas
-          de mobilidade.
-        </p>
+      <main className="mx-auto max-w-5xl px-4 py-8">
+        <section className="relative min-h-56 overflow-hidden rounded-lg border border-border">
+          <img src={mobilityNetwork} alt="Rede digital de mobilidade sobre corredores urbanos noturnos" width={1600} height={900} className="absolute inset-0 h-full w-full object-cover" />
+          <div className="absolute inset-0 bg-[linear-gradient(90deg,var(--background)_0%,color-mix(in_oklab,var(--background)_82%,transparent)_55%,color-mix(in_oklab,var(--background)_25%,transparent)_100%)]" />
+          <div className="relative z-10 flex min-h-56 max-w-2xl flex-col justify-center p-7 sm:p-9">
+            <p className="mb-3 flex items-center gap-2 text-xs font-semibold text-primary"><span className="signal-pulse h-2 w-2 rounded-full bg-primary" /> ROTAS CONECTADAS</p>
+            <h1 className="text-3xl font-bold text-foreground">Planejar viagem</h1>
+            <p className="mt-2 text-sm text-muted-foreground">Informe endereços reais, veja o percurso no mapa e compare todas as alternativas de mobilidade.</p>
+          </div>
+        </section>
 
-        <section className="mt-6 rounded-2xl border border-border bg-card p-6 shadow-soft">
+        <section className="mt-6 rounded-lg border border-border bg-card/95 p-6 shadow-soft backdrop-blur">
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
               <AddressAutocomplete
@@ -202,13 +208,13 @@ function Planejar() {
             />
           </div>
 
-          <button
+          <Button
             onClick={() => void handleSearch()}
             disabled={loading || !origin || !destination}
-            className="mt-5 w-full rounded-xl bg-brand-gradient px-6 py-3 font-semibold text-primary-foreground shadow-glow transition-transform hover:-translate-y-0.5 disabled:opacity-50 disabled:hover:translate-y-0"
+            className="mt-5 h-12 w-full bg-brand-gradient font-semibold text-primary-foreground shadow-glow transition-transform hover:-translate-y-0.5 disabled:hover:translate-y-0"
           >
             {loading ? "Buscando as melhores opções para você…" : "Buscar opções"}
-          </button>
+          </Button>
 
           {loading && (
             <ul className="mt-4 space-y-1 text-xs text-muted-foreground">

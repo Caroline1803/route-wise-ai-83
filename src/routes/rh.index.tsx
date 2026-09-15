@@ -30,6 +30,7 @@ import { Button } from "@/components/ui/button";
 import { brl, brlCompact, num, pct } from "@/lib/rh/format";
 import { rhDashboardService } from "@/lib/rh/services";
 import type { AlertKind } from "@/lib/rh/types";
+import mobilityNetwork from "@/assets/mobility-network-night.jpg";
 
 export const Route = createFileRoute("/rh/")({
   head: () => ({
@@ -78,6 +79,15 @@ function RhDashboard() {
 
   return (
     <div className="space-y-6">
+      <section className="relative min-h-48 overflow-hidden rounded-lg border border-border">
+        <img src={mobilityNetwork} alt="Rede urbana conectada monitorada pelo portal de mobilidade" width={1600} height={900} loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,var(--background)_0%,color-mix(in_oklab,var(--background)_84%,transparent)_55%,color-mix(in_oklab,var(--background)_30%,transparent)_100%)]" />
+        <div className="relative z-10 flex min-h-48 max-w-xl flex-col justify-center p-6 sm:p-8">
+          <p className="mb-2 flex items-center gap-2 text-xs font-semibold text-primary"><span className="signal-pulse h-2 w-2 rounded-full bg-primary" /> OPERAÇÃO CONECTADA</p>
+          <h1 className="font-display text-2xl font-bold text-foreground sm:text-3xl">Inteligência para cada deslocamento</h1>
+          <p className="mt-2 text-sm text-muted-foreground">Visibilidade unificada sobre custos, pessoas, modais e impacto ambiental.</p>
+        </div>
+      </section>
       <RhPageHeader
         title="Gestão de Mobilidade"
         subtitle="Acompanhe os benefícios, custos e comportamento de mobilidade da sua empresa."

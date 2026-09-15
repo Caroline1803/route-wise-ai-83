@@ -17,6 +17,7 @@ import {
   Sparkles,
   Users,
   Wallet,
+  Route as RouteIcon,
 } from "lucide-react";
 
 import { RhAiAssistant } from "@/components/rh/RhAiAssistant";
@@ -87,7 +88,7 @@ function NavList({ onNavigate }: { onNavigate?: () => void }) {
 function Brand() {
   return (
     <Link to="/rh" className="flex items-center gap-2 px-1 py-1">
-      <span className="grid h-9 w-9 place-items-center rounded-xl bg-brand-gradient text-lg">🧭</span>
+      <span className="grid h-9 w-9 place-items-center rounded-lg bg-brand-gradient text-primary-foreground shadow-glow"><RouteIcon className="h-5 w-5" /></span>
       <span className="leading-tight">
         <span className="block font-display text-sm font-bold text-foreground">MaaS Corporate AI</span>
         <span className="block text-[11px] text-muted-foreground">Portal RH</span>
@@ -104,7 +105,7 @@ export function RhShell({ children }: { children: ReactNode }) {
 
   return (
     <div className="min-h-screen bg-background lg:flex">
-      <aside className="sticky top-0 hidden h-screen w-64 shrink-0 flex-col border-r border-sidebar-border bg-sidebar p-4 lg:flex">
+      <aside className="sticky top-0 hidden h-screen w-64 shrink-0 flex-col border-r border-sidebar-border bg-sidebar/95 p-4 backdrop-blur-xl lg:flex">
         <Brand />
         <div className="mt-6 flex-1 overflow-y-auto">
           <NavList />
@@ -118,7 +119,7 @@ export function RhShell({ children }: { children: ReactNode }) {
       </aside>
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="sticky top-0 z-30 border-b border-border bg-card/80 backdrop-blur">
+        <header className="sticky top-0 z-30 border-b border-border bg-background/82 backdrop-blur-xl">
           <div className="flex items-center gap-3 px-4 py-3 sm:px-6">
             <Sheet open={mobileNav} onOpenChange={setMobileNav}>
               <SheetTrigger asChild>
