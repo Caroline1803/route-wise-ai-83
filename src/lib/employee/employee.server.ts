@@ -52,7 +52,10 @@ export async function registerEmployeeCore(raw: unknown, origin?: string): Promi
     options: { ...(origin ? { emailRedirectTo: `${origin}/employee/login` } : {}), data: { name: d.name, role: "EMPLOYEE" } },
   });
   const userId = signUp.user?.id;
-  console.error("[register] signUp", signErr?.message, userId, signUp.user?.identities?.length);
+  if (signErr?.message.toLowerCase().includes("weak")) {
+    return { ok: false, error: "Senha muito comum ou vazada. Escolha outra senha forte.", field: "password" };
+  }
+  if (signErr) console.error("[register] signUp", signErr.message);
   if (signErr || !userId || (signUp.user?.identities?.length ?? 1) === 0) {
     return { ok: false, error: signErr?.message?.includes("registered") ? "Este e-mail já está cadastrado." : "Não foi possível criar o usuário.", field: "email" };
   }
