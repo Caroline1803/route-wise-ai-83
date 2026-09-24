@@ -58,6 +58,39 @@ export interface EmployeeFilters {
   spendRange?: string;
 }
 
+export type WorkRegime = "PRESENCIAL" | "HIBRIDO" | "REMOTO";
+
+export interface NewEmployeeInput {
+  name: string;
+  email: string;
+  cpf: string;
+  phone: string;
+  birthDate: string;
+  department: string;
+  position: string;
+  registration: string;
+  costCenter: string;
+  admissionDate: string;
+  workRegime: WorkRegime;
+  presentialDays: number;
+  zipCode: string;
+  street: string;
+  number: string;
+  complement?: string;
+  district: string;
+  city: string;
+  state: string;
+  policyId: string;
+  monthlyLimit: number;
+  perTripCap: number;
+  allowedModals: string[];
+  status: "ATIVO" | "INATIVO";
+  sendInvite: boolean;
+}
+
+/** Registro em memória de e-mails/CPFs já usados (checagem de duplicidade MOCK). */
+const identityRegistry: { email: string; cpf: string }[] = [];
+
 export const employeeService = {
   list: async (filters: EmployeeFilters = {}): Promise<Employee[]> => {
     const q = (filters.search ?? "").trim().toLowerCase();
@@ -91,6 +124,58 @@ export const employeeService = {
   updateLimit: (id: string, limit: number): Promise<{ ok: true; id: string; limit: number }> =>
     delay({ ok: true as const, id, limit }),
   toggleBlock: (id: string): Promise<{ ok: true; id: string }> => delay({ ok: true as const, id }),
+
+  /** Verificação prévia de duplicidade de CPF/e-mail (MOCK). */
+  checkDuplicate: async (input: { email?: string; cpf?: string }) => {
+    const email = (input.email ?? "").trim().toLowerCase();
+    const cpf = (input.cpf ?? "").replace(/\D/g, "");
+    return delay(
+      {
+        emailTaken: email.length > 0 && identityRegistry.some((r) => r.email === email),
+        cpfTaken: cpf.length === 11 && identityRegistry.some((r) => r.cpf === cpf),
+      },
+      120,
+    );
+  },
+
+  /**
+   * Cadastro de colaborador pelo Portal RH.
+   * MVP: grava apenas na camada de demonstração em memória (carteira digital
+   * inicial + registro de auditoria simulados). Trocar por POST /company/employees.
+   */
+  create: async (input: NewEmployeeInput): Promise<Employee> => {
+    const email = input.email.trim().toLowerCase();
+    const cpf = input.cpf.replace(/\D/g, "");
+    if (identityRegistry.some((r) => r.email === email)) {
+      throw new Error("Já existe um colaborador com este e-mail corporativo.");
+    }
+    if (identityRegistry.some((r) => r.cpf === cpf)) {
+      throw new Error("Já existe um colaborador com este CPF.");
+    }
+
+    const employee: Employee = {
+      id: `n${Date.now().toString().slice(-6)}`,
+      name: input.name.trim(),
+      registration: input.registration.trim(),
+      cpfMasked: `***.${cpf.slice(3, 6)}.${cpf.slice(6, 9)}-**`,
+      department: input.department,
+      role: input.position.trim(),
+      status: input.status,
+      policyId: input.policyId,
+      monthlyLimit: input.monthlyLimit,
+      used: 0,
+      balance: input.monthlyLimit,
+      mainModal: input.allowedModals[0] ?? "Transporte público",
+      allowedModals: input.allowedModals,
+      avgMonthlySpend: 0,
+      cashbackAccrued: 0,
+      co2AvoidedKg: 0,
+    };
+
+    identityRegistry.push({ email, cpf });
+    mockEmployees.unshift(employee);
+    return delay(employee, 320);
+  },
 };
 
 export const creditService = {

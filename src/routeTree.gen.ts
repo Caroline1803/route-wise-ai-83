@@ -33,8 +33,10 @@ import { Route as ApiEmployeesRegisterRouteImport } from './routes/api/employees
 import { Route as ApiMobilityCompareCostsRouteImport } from './routes/api/mobility/compare-costs'
 import { Route as ApiMobilitySearchRouteImport } from './routes/api/mobility/search'
 import { Route as ApiMobilitySpendingEstimateRouteImport } from './routes/api/mobility/spending-estimate'
+import { Route as CompanyEmployeesNewRouteImport } from './routes/company.employees.new'
 import { Route as RhColaboradoresIndexRouteImport } from './routes/rh.colaboradores.index'
 import { Route as RhColaboradoresIdRouteImport } from './routes/rh.colaboradores.$id'
+import { Route as RhColaboradoresNovoRouteImport } from './routes/rh.colaboradores.novo'
 import { Route as AuthenticatedEmployeeSpendingEstimateIndexRouteImport } from './routes/_authenticated/employee.spending-estimate.index'
 import { Route as AuthenticatedEmployeeSpendingEstimateHistoryRouteImport } from './routes/_authenticated/employee.spending-estimate.history'
 
@@ -159,6 +161,11 @@ const ApiMobilitySpendingEstimateRoute =
     path: '/api/mobility/spending-estimate',
     getParentRoute: () => rootRouteImport,
   } as any)
+const CompanyEmployeesNewRoute = CompanyEmployeesNewRouteImport.update({
+  id: '/company/employees/new',
+  path: '/company/employees/new',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RhColaboradoresIndexRoute = RhColaboradoresIndexRouteImport.update({
   id: '/colaboradores/',
   path: '/colaboradores/',
@@ -167,6 +174,11 @@ const RhColaboradoresIndexRoute = RhColaboradoresIndexRouteImport.update({
 const RhColaboradoresIdRoute = RhColaboradoresIdRouteImport.update({
   id: '/colaboradores/$id',
   path: '/colaboradores/$id',
+  getParentRoute: () => RhRoute,
+} as any)
+const RhColaboradoresNovoRoute = RhColaboradoresNovoRouteImport.update({
+  id: '/colaboradores/novo',
+  path: '/colaboradores/novo',
   getParentRoute: () => RhRoute,
 } as any)
 const AuthenticatedEmployeeSpendingEstimateIndexRoute =
@@ -206,7 +218,9 @@ export interface FileRoutesByFullPath {
   '/api/mobility/compare-costs': typeof ApiMobilityCompareCostsRoute
   '/api/mobility/search': typeof ApiMobilitySearchRoute
   '/api/mobility/spending-estimate': typeof ApiMobilitySpendingEstimateRoute
+  '/company/employees/new': typeof CompanyEmployeesNewRoute
   '/rh/colaboradores/$id': typeof RhColaboradoresIdRoute
+  '/rh/colaboradores/novo': typeof RhColaboradoresNovoRoute
   '/rh/colaboradores/': typeof RhColaboradoresIndexRoute
   '/employee/spending-estimate/history': typeof AuthenticatedEmployeeSpendingEstimateHistoryRoute
   '/employee/spending-estimate/': typeof AuthenticatedEmployeeSpendingEstimateIndexRoute
@@ -234,7 +248,9 @@ export interface FileRoutesByTo {
   '/api/mobility/compare-costs': typeof ApiMobilityCompareCostsRoute
   '/api/mobility/search': typeof ApiMobilitySearchRoute
   '/api/mobility/spending-estimate': typeof ApiMobilitySpendingEstimateRoute
+  '/company/employees/new': typeof CompanyEmployeesNewRoute
   '/rh/colaboradores/$id': typeof RhColaboradoresIdRoute
+  '/rh/colaboradores/novo': typeof RhColaboradoresNovoRoute
   '/rh/colaboradores': typeof RhColaboradoresIndexRoute
   '/employee/spending-estimate/history': typeof AuthenticatedEmployeeSpendingEstimateHistoryRoute
   '/employee/spending-estimate': typeof AuthenticatedEmployeeSpendingEstimateIndexRoute
@@ -265,7 +281,9 @@ export interface FileRoutesById {
   '/api/mobility/compare-costs': typeof ApiMobilityCompareCostsRoute
   '/api/mobility/search': typeof ApiMobilitySearchRoute
   '/api/mobility/spending-estimate': typeof ApiMobilitySpendingEstimateRoute
+  '/company/employees/new': typeof CompanyEmployeesNewRoute
   '/rh/colaboradores/$id': typeof RhColaboradoresIdRoute
+  '/rh/colaboradores/novo': typeof RhColaboradoresNovoRoute
   '/rh/colaboradores/': typeof RhColaboradoresIndexRoute
   '/_authenticated/employee/spending-estimate/history': typeof AuthenticatedEmployeeSpendingEstimateHistoryRoute
   '/_authenticated/employee/spending-estimate/': typeof AuthenticatedEmployeeSpendingEstimateIndexRoute
@@ -296,7 +314,9 @@ export interface FileRouteTypes {
     | '/api/mobility/compare-costs'
     | '/api/mobility/search'
     | '/api/mobility/spending-estimate'
+    | '/company/employees/new'
     | '/rh/colaboradores/$id'
+    | '/rh/colaboradores/novo'
     | '/rh/colaboradores/'
     | '/employee/spending-estimate/history'
     | '/employee/spending-estimate/'
@@ -324,7 +344,9 @@ export interface FileRouteTypes {
     | '/api/mobility/compare-costs'
     | '/api/mobility/search'
     | '/api/mobility/spending-estimate'
+    | '/company/employees/new'
     | '/rh/colaboradores/$id'
+    | '/rh/colaboradores/novo'
     | '/rh/colaboradores'
     | '/employee/spending-estimate/history'
     | '/employee/spending-estimate'
@@ -354,7 +376,9 @@ export interface FileRouteTypes {
     | '/api/mobility/compare-costs'
     | '/api/mobility/search'
     | '/api/mobility/spending-estimate'
+    | '/company/employees/new'
     | '/rh/colaboradores/$id'
+    | '/rh/colaboradores/novo'
     | '/rh/colaboradores/'
     | '/_authenticated/employee/spending-estimate/history'
     | '/_authenticated/employee/spending-estimate/'
@@ -373,6 +397,7 @@ export interface RootRouteChildren {
   ApiMobilityCompareCostsRoute: typeof ApiMobilityCompareCostsRoute
   ApiMobilitySearchRoute: typeof ApiMobilitySearchRoute
   ApiMobilitySpendingEstimateRoute: typeof ApiMobilitySpendingEstimateRoute
+  CompanyEmployeesNewRoute: typeof CompanyEmployeesNewRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -545,6 +570,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiMobilitySpendingEstimateRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/company/employees/new': {
+      id: '/company/employees/new'
+      path: '/company/employees/new'
+      fullPath: '/company/employees/new'
+      preLoaderRoute: typeof CompanyEmployeesNewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/rh/colaboradores/': {
       id: '/rh/colaboradores/'
       path: '/colaboradores'
@@ -557,6 +589,13 @@ declare module '@tanstack/react-router' {
       path: '/colaboradores/$id'
       fullPath: '/rh/colaboradores/$id'
       preLoaderRoute: typeof RhColaboradoresIdRouteImport
+      parentRoute: typeof RhRoute
+    }
+    '/rh/colaboradores/novo': {
+      id: '/rh/colaboradores/novo'
+      path: '/colaboradores/novo'
+      fullPath: '/rh/colaboradores/novo'
+      preLoaderRoute: typeof RhColaboradoresNovoRouteImport
       parentRoute: typeof RhRoute
     }
     '/_authenticated/employee/spending-estimate/': {
@@ -606,6 +645,7 @@ interface RhRouteChildren {
   RhTransacoesRoute: typeof RhTransacoesRoute
   RhIndexRoute: typeof RhIndexRoute
   RhColaboradoresIdRoute: typeof RhColaboradoresIdRoute
+  RhColaboradoresNovoRoute: typeof RhColaboradoresNovoRoute
   RhColaboradoresIndexRoute: typeof RhColaboradoresIndexRoute
 }
 
@@ -622,6 +662,7 @@ const RhRouteChildren: RhRouteChildren = {
   RhTransacoesRoute: RhTransacoesRoute,
   RhIndexRoute: RhIndexRoute,
   RhColaboradoresIdRoute: RhColaboradoresIdRoute,
+  RhColaboradoresNovoRoute: RhColaboradoresNovoRoute,
   RhColaboradoresIndexRoute: RhColaboradoresIndexRoute,
 }
 
@@ -640,6 +681,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiMobilityCompareCostsRoute: ApiMobilityCompareCostsRoute,
   ApiMobilitySearchRoute: ApiMobilitySearchRoute,
   ApiMobilitySpendingEstimateRoute: ApiMobilitySpendingEstimateRoute,
+  CompanyEmployeesNewRoute: CompanyEmployeesNewRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
