@@ -42,6 +42,9 @@ export function EmployeeShell({ children }: { children: ReactNode }) {
                 {n.label}
               </Link>
             ))}
+            <Button variant="ghost" size="sm" onClick={() => navigate({ to: "/" })}>
+              <Home className="h-4 w-4" /> Voltar ao início
+            </Button>
             <Button variant="ghost" size="sm" onClick={signOut}>
               <LogOut className="h-4 w-4" /> Sair
             </Button>
