@@ -9,7 +9,7 @@ export interface Location {
   label?: string;
 }
 
-export type ProviderId = "UBER" | "99" | "BIKE" | "PUBLIC_TRANSPORT";
+export type ProviderId = "UBER" | "99" | "BIKE" | "SCOOTER" | "PUBLIC_TRANSPORT";
 
 export type Modal =
   | "RIDE_HAILING"
@@ -17,6 +17,7 @@ export type Modal =
   | "METRO"
   | "TRAIN"
   | "BIKE"
+  | "SCOOTER"
   | "MULTIMODAL";
 
 export type DataSource = "LIVE" | "SANDBOX" | "MOCK";

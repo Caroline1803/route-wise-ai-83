@@ -10,7 +10,7 @@ export const DEFAULT_WALLET: Wallet = {
   balance: 240,
   currency: "BRL",
   policy: {
-    allowedModals: ["BUS", "METRO", "TRAIN", "BIKE", "MULTIMODAL", "RIDE_HAILING"],
+    allowedModals: ["BUS", "METRO", "TRAIN", "BIKE", "SCOOTER", "MULTIMODAL", "RIDE_HAILING"],
     rideHailingAllowedAfterHour: 20,
     monthlyLimit: 600,
     monthlyUsed: 372,
@@ -32,6 +32,7 @@ const BASE_CASHBACK_RATE: Record<string, number> = {
   TRAIN: 0.03,
   MULTIMODAL: 0.03,
   BIKE: 0.05,
+  SCOOTER: 0.02,
   RIDE_HAILING: 0.01,
 };
 
