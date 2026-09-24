@@ -161,9 +161,9 @@ function Field({
 }: {
   label: string;
   htmlFor: string;
-  error?: string;
+  error?: string | undefined;
   children: React.ReactNode;
-  className?: string;
+  className?: string | undefined;
 }) {
   return (
     <div className={className}>
