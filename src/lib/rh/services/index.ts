@@ -58,6 +58,39 @@ export interface EmployeeFilters {
   spendRange?: string;
 }
 
+export type WorkRegime = "PRESENCIAL" | "HIBRIDO" | "REMOTO";
+
+export interface NewEmployeeInput {
+  name: string;
+  email: string;
+  cpf: string;
+  phone: string;
+  birthDate: string;
+  department: string;
+  position: string;
+  registration: string;
+  costCenter: string;
+  admissionDate: string;
+  workRegime: WorkRegime;
+  presentialDays: number;
+  zipCode: string;
+  street: string;
+  number: string;
+  complement?: string;
+  district: string;
+  city: string;
+  state: string;
+  policyId: string;
+  monthlyLimit: number;
+  perTripCap: number;
+  allowedModals: string[];
+  status: "ATIVO" | "INATIVO";
+  sendInvite: boolean;
+}
+
+/** Registro em memória de e-mails/CPFs já usados (checagem de duplicidade MOCK). */
+const identityRegistry: { email: string; cpf: string }[] = [];
+
 export const employeeService = {
   list: async (filters: EmployeeFilters = {}): Promise<Employee[]> => {
     const q = (filters.search ?? "").trim().toLowerCase();
