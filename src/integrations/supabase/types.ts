@@ -14,16 +14,243 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      access_logs: {
+        Row: {
+          created_at: string
+          email: string
+          event: string
+          id: number
+          success: boolean
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          event: string
+          id?: number
+          success: boolean
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          event?: string
+          id?: number
+          success?: boolean
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      companies: {
+        Row: {
+          auto_activate: boolean
+          created_at: string
+          default_monthly_credit: number
+          id: number
+          name: string
+        }
+        Insert: {
+          auto_activate?: boolean
+          created_at?: string
+          default_monthly_credit?: number
+          id?: number
+          name: string
+        }
+        Update: {
+          auto_activate?: boolean
+          created_at?: string
+          default_monthly_credit?: number
+          id?: number
+          name?: string
+        }
+        Relationships: []
+      }
+      employees: {
+        Row: {
+          address: string
+          admission_date: string
+          birth_date: string
+          city: string
+          company_id: number
+          cost_center: string
+          cpf: string
+          created_at: string
+          department: string
+          email: string
+          employee_number: string
+          name: string
+          phone: string
+          policy_name: string
+          position: string
+          state: string
+          status: Database["public"]["Enums"]["employee_status"]
+          user_id: string
+          zip_code: string
+        }
+        Insert: {
+          address: string
+          admission_date: string
+          birth_date: string
+          city: string
+          company_id: number
+          cost_center: string
+          cpf: string
+          created_at?: string
+          department: string
+          email: string
+          employee_number: string
+          name: string
+          phone: string
+          policy_name?: string
+          position: string
+          state: string
+          status?: Database["public"]["Enums"]["employee_status"]
+          user_id: string
+          zip_code: string
+        }
+        Update: {
+          address?: string
+          admission_date?: string
+          birth_date?: string
+          city?: string
+          company_id?: number
+          cost_center?: string
+          cpf?: string
+          created_at?: string
+          department?: string
+          email?: string
+          employee_number?: string
+          name?: string
+          phone?: string
+          policy_name?: string
+          position?: string
+          state?: string
+          status?: Database["public"]["Enums"]["employee_status"]
+          user_id?: string
+          zip_code?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "employees_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      spending_estimates: {
+        Row: {
+          corporate_credit: number
+          created_at: string
+          days_per_week: number
+          destination: string
+          estimated_daily_cost: number
+          estimated_monthly_cost: number
+          estimated_remaining_balance: number
+          estimated_weekly_cost: number
+          id: string
+          origin: string
+          transport_mode: string
+          trips_per_day: number
+          user_id: string
+          working_days_month: number
+        }
+        Insert: {
+          corporate_credit: number
+          created_at?: string
+          days_per_week: number
+          destination: string
+          estimated_daily_cost: number
+          estimated_monthly_cost: number
+          estimated_remaining_balance: number
+          estimated_weekly_cost: number
+          id?: string
+          origin: string
+          transport_mode: string
+          trips_per_day: number
+          user_id?: string
+          working_days_month: number
+        }
+        Update: {
+          corporate_credit?: number
+          created_at?: string
+          days_per_week?: number
+          destination?: string
+          estimated_daily_cost?: number
+          estimated_monthly_cost?: number
+          estimated_remaining_balance?: number
+          estimated_weekly_cost?: number
+          id?: string
+          origin?: string
+          transport_mode?: string
+          trips_per_day?: number
+          user_id?: string
+          working_days_month?: number
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      wallets: {
+        Row: {
+          balance: number
+          cashback: number
+          corporate_credit: number
+          created_at: string
+          spent_this_month: number
+          user_id: string
+        }
+        Insert: {
+          balance?: number
+          cashback?: number
+          corporate_credit?: number
+          created_at?: string
+          spent_this_month?: number
+          user_id: string
+        }
+        Update: {
+          balance?: number
+          cashback?: number
+          corporate_credit?: number
+          created_at?: string
+          spent_this_month?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "hr" | "employee"
+      employee_status: "PENDING" | "ACTIVE" | "BLOCKED"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +377,9 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "hr", "employee"],
+      employee_status: ["PENDING", "ACTIVE", "BLOCKED"],
+    },
   },
 } as const
