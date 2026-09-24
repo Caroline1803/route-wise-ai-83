@@ -26,6 +26,12 @@ export function SiteHeader() {
           >
             Portal RH
           </Link>
+          <Link
+            to="/employee/login"
+            className="rounded-md bg-primary px-3 py-2 font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+          >
+            Área do colaborador
+          </Link>
         </nav>
       </div>
     </header>
