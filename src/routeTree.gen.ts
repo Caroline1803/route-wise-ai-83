@@ -10,8 +10,12 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as PlanejarRouteImport } from './routes/planejar'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as RhRouteImport } from './routes/rh'
+import { Route as EmployeeLoginRouteImport } from './routes/employee.login'
+import { Route as EmployeeRegisterRouteImport } from './routes/employee.register'
 import { Route as RhIndexRouteImport } from './routes/rh.index'
 import { Route as RhCashbackRouteImport } from './routes/rh.cashback'
 import { Route as RhConfiguracoesRouteImport } from './routes/rh.configuracoes'
@@ -23,6 +27,7 @@ import { Route as RhMobilidadeRouteImport } from './routes/rh.mobilidade'
 import { Route as RhPoliticasRouteImport } from './routes/rh.politicas'
 import { Route as RhRelatoriosRouteImport } from './routes/rh.relatorios'
 import { Route as RhTransacoesRouteImport } from './routes/rh.transacoes'
+import { Route as AuthenticatedEmployeeDashboardRouteImport } from './routes/_authenticated/employee.dashboard'
 import { Route as ApiMobilitySearchRouteImport } from './routes/api/mobility/search'
 import { Route as RhColaboradoresIndexRouteImport } from './routes/rh.colaboradores.index'
 import { Route as RhColaboradoresIdRouteImport } from './routes/rh.colaboradores.$id'
@@ -32,14 +37,33 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PlanejarRoute = PlanejarRouteImport.update({
   id: '/planejar',
   path: '/planejar',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RhRoute = RhRouteImport.update({
   id: '/rh',
   path: '/rh',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EmployeeLoginRoute = EmployeeLoginRouteImport.update({
+  id: '/employee/login',
+  path: '/employee/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EmployeeRegisterRoute = EmployeeRegisterRouteImport.update({
+  id: '/employee/register',
+  path: '/employee/register',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RhIndexRoute = RhIndexRouteImport.update({
@@ -97,6 +121,12 @@ const RhTransacoesRoute = RhTransacoesRouteImport.update({
   path: '/transacoes',
   getParentRoute: () => RhRoute,
 } as any)
+const AuthenticatedEmployeeDashboardRoute =
+  AuthenticatedEmployeeDashboardRouteImport.update({
+    id: '/employee/dashboard',
+    path: '/employee/dashboard',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const ApiMobilitySearchRoute = ApiMobilitySearchRouteImport.update({
   id: '/api/mobility/search',
   path: '/api/mobility/search',
@@ -116,7 +146,10 @@ const RhColaboradoresIdRoute = RhColaboradoresIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/planejar': typeof PlanejarRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/rh': typeof RhRouteWithChildren
+  '/employee/login': typeof EmployeeLoginRoute
+  '/employee/register': typeof EmployeeRegisterRoute
   '/rh/cashback': typeof RhCashbackRoute
   '/rh/configuracoes': typeof RhConfiguracoesRoute
   '/rh/creditos': typeof RhCreditosRoute
@@ -128,6 +161,7 @@ export interface FileRoutesByFullPath {
   '/rh/relatorios': typeof RhRelatoriosRoute
   '/rh/transacoes': typeof RhTransacoesRoute
   '/rh/': typeof RhIndexRoute
+  '/employee/dashboard': typeof AuthenticatedEmployeeDashboardRoute
   '/api/mobility/search': typeof ApiMobilitySearchRoute
   '/rh/colaboradores/$id': typeof RhColaboradoresIdRoute
   '/rh/colaboradores/': typeof RhColaboradoresIndexRoute
@@ -135,6 +169,9 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/planejar': typeof PlanejarRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/employee/login': typeof EmployeeLoginRoute
+  '/employee/register': typeof EmployeeRegisterRoute
   '/rh/cashback': typeof RhCashbackRoute
   '/rh/configuracoes': typeof RhConfiguracoesRoute
   '/rh/creditos': typeof RhCreditosRoute
@@ -146,6 +183,7 @@ export interface FileRoutesByTo {
   '/rh/relatorios': typeof RhRelatoriosRoute
   '/rh/transacoes': typeof RhTransacoesRoute
   '/rh': typeof RhIndexRoute
+  '/employee/dashboard': typeof AuthenticatedEmployeeDashboardRoute
   '/api/mobility/search': typeof ApiMobilitySearchRoute
   '/rh/colaboradores/$id': typeof RhColaboradoresIdRoute
   '/rh/colaboradores': typeof RhColaboradoresIndexRoute
@@ -153,8 +191,12 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/planejar': typeof PlanejarRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/rh': typeof RhRouteWithChildren
+  '/employee/login': typeof EmployeeLoginRoute
+  '/employee/register': typeof EmployeeRegisterRoute
   '/rh/cashback': typeof RhCashbackRoute
   '/rh/configuracoes': typeof RhConfiguracoesRoute
   '/rh/creditos': typeof RhCreditosRoute
@@ -166,6 +208,7 @@ export interface FileRoutesById {
   '/rh/relatorios': typeof RhRelatoriosRoute
   '/rh/transacoes': typeof RhTransacoesRoute
   '/rh/': typeof RhIndexRoute
+  '/_authenticated/employee/dashboard': typeof AuthenticatedEmployeeDashboardRoute
   '/api/mobility/search': typeof ApiMobilitySearchRoute
   '/rh/colaboradores/$id': typeof RhColaboradoresIdRoute
   '/rh/colaboradores/': typeof RhColaboradoresIndexRoute
@@ -175,7 +218,10 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/planejar'
+    | '/reset-password'
     | '/rh'
+    | '/employee/login'
+    | '/employee/register'
     | '/rh/cashback'
     | '/rh/configuracoes'
     | '/rh/creditos'
@@ -187,6 +233,7 @@ export interface FileRouteTypes {
     | '/rh/relatorios'
     | '/rh/transacoes'
     | '/rh/'
+    | '/employee/dashboard'
     | '/api/mobility/search'
     | '/rh/colaboradores/$id'
     | '/rh/colaboradores/'
@@ -194,6 +241,9 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/planejar'
+    | '/reset-password'
+    | '/employee/login'
+    | '/employee/register'
     | '/rh/cashback'
     | '/rh/configuracoes'
     | '/rh/creditos'
@@ -205,14 +255,19 @@ export interface FileRouteTypes {
     | '/rh/relatorios'
     | '/rh/transacoes'
     | '/rh'
+    | '/employee/dashboard'
     | '/api/mobility/search'
     | '/rh/colaboradores/$id'
     | '/rh/colaboradores'
   id:
     | '__root__'
     | '/'
+    | '/_authenticated'
     | '/planejar'
+    | '/reset-password'
     | '/rh'
+    | '/employee/login'
+    | '/employee/register'
     | '/rh/cashback'
     | '/rh/configuracoes'
     | '/rh/creditos'
@@ -224,6 +279,7 @@ export interface FileRouteTypes {
     | '/rh/relatorios'
     | '/rh/transacoes'
     | '/rh/'
+    | '/_authenticated/employee/dashboard'
     | '/api/mobility/search'
     | '/rh/colaboradores/$id'
     | '/rh/colaboradores/'
@@ -231,8 +287,12 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   PlanejarRoute: typeof PlanejarRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   RhRoute: typeof RhRouteWithChildren
+  EmployeeLoginRoute: typeof EmployeeLoginRoute
+  EmployeeRegisterRoute: typeof EmployeeRegisterRoute
   ApiMobilitySearchRoute: typeof ApiMobilitySearchRoute
 }
 
@@ -245,6 +305,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/planejar': {
       id: '/planejar'
       path: '/planejar'
@@ -252,11 +319,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PlanejarRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/rh': {
       id: '/rh'
       path: '/rh'
       fullPath: '/rh'
       preLoaderRoute: typeof RhRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/employee/login': {
+      id: '/employee/login'
+      path: '/employee/login'
+      fullPath: '/employee/login'
+      preLoaderRoute: typeof EmployeeLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/employee/register': {
+      id: '/employee/register'
+      path: '/employee/register'
+      fullPath: '/employee/register'
+      preLoaderRoute: typeof EmployeeRegisterRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/rh/': {
@@ -336,6 +424,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RhTransacoesRouteImport
       parentRoute: typeof RhRoute
     }
+    '/_authenticated/employee/dashboard': {
+      id: '/_authenticated/employee/dashboard'
+      path: '/employee/dashboard'
+      fullPath: '/employee/dashboard'
+      preLoaderRoute: typeof AuthenticatedEmployeeDashboardRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/api/mobility/search': {
       id: '/api/mobility/search'
       path: '/api/mobility/search'
@@ -359,6 +454,17 @@ declare module '@tanstack/react-router' {
     }
   }
 }
+
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedEmployeeDashboardRoute: typeof AuthenticatedEmployeeDashboardRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedEmployeeDashboardRoute: AuthenticatedEmployeeDashboardRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
 interface RhRouteChildren {
   RhCashbackRoute: typeof RhCashbackRoute
@@ -396,8 +502,12 @@ const RhRouteWithChildren = RhRoute._addFileChildren(RhRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   PlanejarRoute: PlanejarRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   RhRoute: RhRouteWithChildren,
+  EmployeeLoginRoute: EmployeeLoginRoute,
+  EmployeeRegisterRoute: EmployeeRegisterRoute,
   ApiMobilitySearchRoute: ApiMobilitySearchRoute,
 }
 export const routeTree = rootRouteImport

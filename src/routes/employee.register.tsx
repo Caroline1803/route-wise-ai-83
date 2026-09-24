@@ -79,10 +79,10 @@ function RegisterPage() {
     const errs: Record<string, string> = {};
     const parsed = registerSchema.safeParse(values);
     if (!parsed.success) for (const i of parsed.error.issues) errs[String(i.path[0])] ??= i.message;
-    if (values.password !== values.confirm) errs.confirm = "As senhas não conferem";
-    if (!values.terms) errs.terms = "É necessário aceitar os termos";
+    if (values["password"] !== values["confirm"]) errs["confirm"] = "As senhas não conferem";
+    if (!values["terms"]) errs["terms"] = "É necessário aceitar os termos";
     setErrors(errs);
-    if (Object.keys(errs).length) return toast.error("Revise os campos destacados.");
+    if (Object.keys(errs).length) { toast.error("Revise os campos destacados."); return; }
     setBusy(true);
     try {
       const { confirm: _c, terms: _t, ...payload } = values;
@@ -132,7 +132,7 @@ function RegisterPage() {
                         <option key={c.id} value={c.id}>{c.name}</option>
                       ))}
                     </select>
-                    {errors.company_id ? <p className="mt-1 text-xs text-destructive">{errors.company_id}</p> : null}
+                    {errors["company_id"] ? <p className="mt-1 text-xs text-destructive">{errors["company_id"]}</p> : null}
                   </div>
                 ) : null}
                 {s.fields.map((f) => (
@@ -154,7 +154,7 @@ function RegisterPage() {
             <input type="checkbox" name="terms" value="1" className="mt-0.5 h-4 w-4 accent-[var(--primary)]" />
             Aceito os termos de uso e política de privacidade.
           </label>
-          {errors.terms ? <p className="-mt-4 text-xs text-destructive">{errors.terms}</p> : null}
+          {errors["terms"] ? <p className="-mt-4 text-xs text-destructive">{errors["terms"]}</p> : null}
           <div className="flex flex-wrap items-center gap-4">
             <Button type="submit" size="lg" disabled={busy}>{busy ? "Criando..." : "Criar conta"}</Button>
             <Link to="/employee/login" className="text-sm text-primary hover:underline">Já tenho conta</Link>

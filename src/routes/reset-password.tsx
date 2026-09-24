@@ -30,12 +30,12 @@ function ResetPage() {
     const fd = new FormData(e.currentTarget);
     const pw = String(fd.get("password"));
     const ok = strongPassword.safeParse(pw);
-    if (!ok.success) return toast.error(ok.error.issues[0]!.message);
-    if (pw !== fd.get("confirm")) return toast.error("As senhas não conferem.");
+    if (!ok.success) { toast.error(ok.error.issues[0]!.message); return; }
+    if (pw !== fd.get("confirm")) { toast.error("As senhas não conferem."); return; }
     setBusy(true);
     const { error } = await supabase.auth.updateUser({ password: pw });
     setBusy(false);
-    if (error) return toast.error("Link inválido ou expirado.");
+    if (error) { toast.error("Link inválido ou expirado."); return; }
     toast.success("Senha atualizada!");
     navigate({ to: "/employee/dashboard" });
   }

@@ -36,18 +36,18 @@ function LoginPage() {
     const mail = String(fd.get("email") ?? "").trim().toLowerCase();
     const password = String(fd.get("password") ?? "");
     const remember = fd.get("remember") === "1";
-    if (!mail || !password) return toast.error("Informe e-mail e senha.");
+    if (!mail || !password) { toast.error("Informe e-mail e senha."); return; }
     setBusy(true);
     try {
       const lock = await checkLock({ data: { email: mail } });
-      if (lock.locked) return toast.error("Acesso bloqueado por 15 minutos após várias tentativas incorretas.");
+      if (lock.locked) { toast.error("Acesso bloqueado por 15 minutos após várias tentativas incorretas."); return; }
       const { data, error } = await supabase.auth.signInWithPassword({ email: mail, password });
       await record({ data: { email: mail, success: !error } });
       if (error || !data.user) {
         const left = Math.max(0, lock.remaining - 1);
-        return toast.error(
+        { toast.error(
           error?.message.includes("confirm") ? "Confirme seu e-mail antes de entrar." : `E-mail ou senha incorretos. ${left} tentativa(s) restante(s).`,
-        );
+        ); return; }
       }
       if (!remember) sessionStorage.setItem("maas-session-only", "1");
       else sessionStorage.removeItem("maas-session-only");
@@ -63,7 +63,7 @@ function LoginPage() {
   }
 
   async function forgot() {
-    if (!email) return toast.error("Digite seu e-mail corporativo primeiro.");
+    if (!email) { toast.error("Digite seu e-mail corporativo primeiro."); return; }
     const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo: `${window.location.origin}/reset-password` });
     if (error) toast.error("Não foi possível enviar o e-mail.");
     else toast.success("Enviamos um link para redefinir sua senha.");
