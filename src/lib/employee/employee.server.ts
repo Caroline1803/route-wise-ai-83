@@ -49,7 +49,7 @@ export async function registerEmployeeCore(raw: unknown, origin?: string): Promi
   const { data: signUp, error: signErr } = await publicClient().auth.signUp({
     email: d.email,
     password: d.password,
-    options: { emailRedirectTo: origin ? `${origin}/employee/login` : undefined, data: { name: d.name, role: "EMPLOYEE" } },
+    options: { ...(origin ? { emailRedirectTo: `${origin}/employee/login` } : {}), data: { name: d.name, role: "EMPLOYEE" } },
   });
   const userId = signUp.user?.id;
   if (signErr || !userId || (signUp.user?.identities?.length ?? 1) === 0) {

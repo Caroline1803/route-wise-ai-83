@@ -2,7 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { getRequestHeader } from "@tanstack/react-start/server";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { calcEstimate, compareCosts, costPerTripFor, type TransportMode } from "@/lib/estimate/calc";
+import { calcEstimate, costPerTripFor, type TransportMode } from "@/lib/estimate/calc";
 import { checkLockCore, logAccessCore, registerEmployeeCore } from "./employee.server";
 
 export const listCompanies = createServerFn({ method: "GET" }).handler(async () => {
@@ -42,13 +42,9 @@ export const getEmployeeDashboard = createServerFn({ method: "GET" })
     const balance = Number(w?.balance ?? 420);
     const spent = Number(w?.spent_this_month ?? 186.5);
     const credit = Number(w?.corporate_credit ?? 350);
-    // Estimativa até o fim do mês: gasto atual + projeção dos dias restantes
-    const now = new Date();
-    const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
-    const projected = last.data?.[0]
-      ? Math.round(Number(last.data[0].estimated_monthly_cost) * 100) / 100
-      : Math.round((spent / Math.max(1, now.getDate())) * daysInMonth * 100) / 100;
-    const estimateToEnd = Math.max(spent, Math.min(projected, 275) || 275);
+    // Estimativa até o fim do mês: última estimativa salva ou projeção padrão (MOCK)
+    const projected = last.data?.[0] ? Number(last.data[0].estimated_monthly_cost) : 275;
+    const estimateToEnd = Math.max(spent, Math.round(projected * 100) / 100);
     return {
       employee: emp.data,
       roles: (roles.data ?? []).map((r) => r.role),
@@ -118,4 +114,3 @@ export const getWalletCredit = createServerFn({ method: "GET" })
     return { credit: Number(data?.corporate_credit ?? 350) };
   });
 
-export { compareCosts };
