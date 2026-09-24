@@ -81,14 +81,10 @@ function ColaboradoresPage() {
               >
                 <Upload className="mr-1.5 h-4 w-4" /> Importar colaboradores
               </Button>
-              <Button
-                onClick={() =>
-                  toast.success("Cadastro simulado", {
-                    description: "No MVP o cadastro não persiste; será ligado ao backend depois.",
-                  })
-                }
-              >
-                <Plus className="mr-1.5 h-4 w-4" /> Adicionar colaborador
+              <Button asChild>
+                <Link to="/rh/colaboradores/novo">
+                  <Plus className="mr-1.5 h-4 w-4" /> Novo Funcionário
+                </Link>
               </Button>
             </div>
           ) : null
