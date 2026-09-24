@@ -8,6 +8,7 @@ import { UberAdapter } from "./providers/uber";
 import { NinetyNineAdapter } from "./providers/ninetynine";
 import { BikeAdapter } from "./providers/bike";
 import { ScooterMockProvider } from "./providers/scooter";
+import { ScooterMockProvider } from "./providers/scooter";
 import { PublicTransportAdapter } from "./providers/publicTransport";
 
 /**
@@ -65,6 +66,7 @@ export function getProviders(): MobilityProvider[] {
     new UberAdapter(),
     new NinetyNineAdapter(),
     new BikeAdapter(),
+    new ScooterMockProvider(),
     new ScooterMockProvider(),
     new PublicTransportAdapter(),
   ];
