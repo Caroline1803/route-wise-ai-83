@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
-import { LogOut, Route as RouteIcon } from "lucide-react";
+import { Home, LogOut, Route as RouteIcon } from "lucide-react";
 import type { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
@@ -42,6 +42,9 @@ export function EmployeeShell({ children }: { children: ReactNode }) {
                 {n.label}
               </Link>
             ))}
+            <Button variant="ghost" size="sm" onClick={() => navigate({ to: "/" })}>
+              <Home className="h-4 w-4" /> Voltar ao início
+            </Button>
             <Button variant="ghost" size="sm" onClick={signOut}>
               <LogOut className="h-4 w-4" /> Sair
             </Button>
