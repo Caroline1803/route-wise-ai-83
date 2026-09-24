@@ -7,6 +7,7 @@ const MODAL_ICON: Record<string, string> = {
   METRO: "🚇",
   TRAIN: "🚆",
   BIKE: "🚲",
+  SCOOTER: "🛴",
   MULTIMODAL: "🔀",
 };
 

@@ -10,8 +10,12 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as PlanejarRouteImport } from './routes/planejar'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as RhRouteImport } from './routes/rh'
+import { Route as EmployeeLoginRouteImport } from './routes/employee.login'
+import { Route as EmployeeRegisterRouteImport } from './routes/employee.register'
 import { Route as RhIndexRouteImport } from './routes/rh.index'
 import { Route as RhCashbackRouteImport } from './routes/rh.cashback'
 import { Route as RhConfiguracoesRouteImport } from './routes/rh.configuracoes'
@@ -23,13 +27,24 @@ import { Route as RhMobilidadeRouteImport } from './routes/rh.mobilidade'
 import { Route as RhPoliticasRouteImport } from './routes/rh.politicas'
 import { Route as RhRelatoriosRouteImport } from './routes/rh.relatorios'
 import { Route as RhTransacoesRouteImport } from './routes/rh.transacoes'
+import { Route as AuthenticatedEmployeeDashboardRouteImport } from './routes/_authenticated/employee.dashboard'
+import { Route as ApiAuthLoginRouteImport } from './routes/api/auth/login'
+import { Route as ApiEmployeesRegisterRouteImport } from './routes/api/employees/register'
+import { Route as ApiMobilityCompareCostsRouteImport } from './routes/api/mobility/compare-costs'
 import { Route as ApiMobilitySearchRouteImport } from './routes/api/mobility/search'
+import { Route as ApiMobilitySpendingEstimateRouteImport } from './routes/api/mobility/spending-estimate'
 import { Route as RhColaboradoresIndexRouteImport } from './routes/rh.colaboradores.index'
 import { Route as RhColaboradoresIdRouteImport } from './routes/rh.colaboradores.$id'
+import { Route as AuthenticatedEmployeeSpendingEstimateIndexRouteImport } from './routes/_authenticated/employee.spending-estimate.index'
+import { Route as AuthenticatedEmployeeSpendingEstimateHistoryRouteImport } from './routes/_authenticated/employee.spending-estimate.history'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PlanejarRoute = PlanejarRouteImport.update({
@@ -37,9 +52,24 @@ const PlanejarRoute = PlanejarRouteImport.update({
   path: '/planejar',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RhRoute = RhRouteImport.update({
   id: '/rh',
   path: '/rh',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EmployeeLoginRoute = EmployeeLoginRouteImport.update({
+  id: '/employee/login',
+  path: '/employee/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EmployeeRegisterRoute = EmployeeRegisterRouteImport.update({
+  id: '/employee/register',
+  path: '/employee/register',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RhIndexRoute = RhIndexRouteImport.update({
@@ -97,11 +127,38 @@ const RhTransacoesRoute = RhTransacoesRouteImport.update({
   path: '/transacoes',
   getParentRoute: () => RhRoute,
 } as any)
+const AuthenticatedEmployeeDashboardRoute =
+  AuthenticatedEmployeeDashboardRouteImport.update({
+    id: '/employee/dashboard',
+    path: '/employee/dashboard',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const ApiAuthLoginRoute = ApiAuthLoginRouteImport.update({
+  id: '/api/auth/login',
+  path: '/api/auth/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiEmployeesRegisterRoute = ApiEmployeesRegisterRouteImport.update({
+  id: '/api/employees/register',
+  path: '/api/employees/register',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiMobilityCompareCostsRoute = ApiMobilityCompareCostsRouteImport.update({
+  id: '/api/mobility/compare-costs',
+  path: '/api/mobility/compare-costs',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiMobilitySearchRoute = ApiMobilitySearchRouteImport.update({
   id: '/api/mobility/search',
   path: '/api/mobility/search',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiMobilitySpendingEstimateRoute =
+  ApiMobilitySpendingEstimateRouteImport.update({
+    id: '/api/mobility/spending-estimate',
+    path: '/api/mobility/spending-estimate',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const RhColaboradoresIndexRoute = RhColaboradoresIndexRouteImport.update({
   id: '/colaboradores/',
   path: '/colaboradores/',
@@ -112,11 +169,26 @@ const RhColaboradoresIdRoute = RhColaboradoresIdRouteImport.update({
   path: '/colaboradores/$id',
   getParentRoute: () => RhRoute,
 } as any)
+const AuthenticatedEmployeeSpendingEstimateIndexRoute =
+  AuthenticatedEmployeeSpendingEstimateIndexRouteImport.update({
+    id: '/employee/spending-estimate/',
+    path: '/employee/spending-estimate/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedEmployeeSpendingEstimateHistoryRoute =
+  AuthenticatedEmployeeSpendingEstimateHistoryRouteImport.update({
+    id: '/employee/spending-estimate/history',
+    path: '/employee/spending-estimate/history',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/planejar': typeof PlanejarRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/rh': typeof RhRouteWithChildren
+  '/employee/login': typeof EmployeeLoginRoute
+  '/employee/register': typeof EmployeeRegisterRoute
   '/rh/cashback': typeof RhCashbackRoute
   '/rh/configuracoes': typeof RhConfiguracoesRoute
   '/rh/creditos': typeof RhCreditosRoute
@@ -128,13 +200,23 @@ export interface FileRoutesByFullPath {
   '/rh/relatorios': typeof RhRelatoriosRoute
   '/rh/transacoes': typeof RhTransacoesRoute
   '/rh/': typeof RhIndexRoute
+  '/employee/dashboard': typeof AuthenticatedEmployeeDashboardRoute
+  '/api/auth/login': typeof ApiAuthLoginRoute
+  '/api/employees/register': typeof ApiEmployeesRegisterRoute
+  '/api/mobility/compare-costs': typeof ApiMobilityCompareCostsRoute
   '/api/mobility/search': typeof ApiMobilitySearchRoute
+  '/api/mobility/spending-estimate': typeof ApiMobilitySpendingEstimateRoute
   '/rh/colaboradores/$id': typeof RhColaboradoresIdRoute
   '/rh/colaboradores/': typeof RhColaboradoresIndexRoute
+  '/employee/spending-estimate/history': typeof AuthenticatedEmployeeSpendingEstimateHistoryRoute
+  '/employee/spending-estimate/': typeof AuthenticatedEmployeeSpendingEstimateIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/planejar': typeof PlanejarRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/employee/login': typeof EmployeeLoginRoute
+  '/employee/register': typeof EmployeeRegisterRoute
   '/rh/cashback': typeof RhCashbackRoute
   '/rh/configuracoes': typeof RhConfiguracoesRoute
   '/rh/creditos': typeof RhCreditosRoute
@@ -146,15 +228,26 @@ export interface FileRoutesByTo {
   '/rh/relatorios': typeof RhRelatoriosRoute
   '/rh/transacoes': typeof RhTransacoesRoute
   '/rh': typeof RhIndexRoute
+  '/employee/dashboard': typeof AuthenticatedEmployeeDashboardRoute
+  '/api/auth/login': typeof ApiAuthLoginRoute
+  '/api/employees/register': typeof ApiEmployeesRegisterRoute
+  '/api/mobility/compare-costs': typeof ApiMobilityCompareCostsRoute
   '/api/mobility/search': typeof ApiMobilitySearchRoute
+  '/api/mobility/spending-estimate': typeof ApiMobilitySpendingEstimateRoute
   '/rh/colaboradores/$id': typeof RhColaboradoresIdRoute
   '/rh/colaboradores': typeof RhColaboradoresIndexRoute
+  '/employee/spending-estimate/history': typeof AuthenticatedEmployeeSpendingEstimateHistoryRoute
+  '/employee/spending-estimate': typeof AuthenticatedEmployeeSpendingEstimateIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/planejar': typeof PlanejarRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/rh': typeof RhRouteWithChildren
+  '/employee/login': typeof EmployeeLoginRoute
+  '/employee/register': typeof EmployeeRegisterRoute
   '/rh/cashback': typeof RhCashbackRoute
   '/rh/configuracoes': typeof RhConfiguracoesRoute
   '/rh/creditos': typeof RhCreditosRoute
@@ -166,16 +259,26 @@ export interface FileRoutesById {
   '/rh/relatorios': typeof RhRelatoriosRoute
   '/rh/transacoes': typeof RhTransacoesRoute
   '/rh/': typeof RhIndexRoute
+  '/_authenticated/employee/dashboard': typeof AuthenticatedEmployeeDashboardRoute
+  '/api/auth/login': typeof ApiAuthLoginRoute
+  '/api/employees/register': typeof ApiEmployeesRegisterRoute
+  '/api/mobility/compare-costs': typeof ApiMobilityCompareCostsRoute
   '/api/mobility/search': typeof ApiMobilitySearchRoute
+  '/api/mobility/spending-estimate': typeof ApiMobilitySpendingEstimateRoute
   '/rh/colaboradores/$id': typeof RhColaboradoresIdRoute
   '/rh/colaboradores/': typeof RhColaboradoresIndexRoute
+  '/_authenticated/employee/spending-estimate/history': typeof AuthenticatedEmployeeSpendingEstimateHistoryRoute
+  '/_authenticated/employee/spending-estimate/': typeof AuthenticatedEmployeeSpendingEstimateIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/planejar'
+    | '/reset-password'
     | '/rh'
+    | '/employee/login'
+    | '/employee/register'
     | '/rh/cashback'
     | '/rh/configuracoes'
     | '/rh/creditos'
@@ -187,13 +290,23 @@ export interface FileRouteTypes {
     | '/rh/relatorios'
     | '/rh/transacoes'
     | '/rh/'
+    | '/employee/dashboard'
+    | '/api/auth/login'
+    | '/api/employees/register'
+    | '/api/mobility/compare-costs'
     | '/api/mobility/search'
+    | '/api/mobility/spending-estimate'
     | '/rh/colaboradores/$id'
     | '/rh/colaboradores/'
+    | '/employee/spending-estimate/history'
+    | '/employee/spending-estimate/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/planejar'
+    | '/reset-password'
+    | '/employee/login'
+    | '/employee/register'
     | '/rh/cashback'
     | '/rh/configuracoes'
     | '/rh/creditos'
@@ -205,14 +318,25 @@ export interface FileRouteTypes {
     | '/rh/relatorios'
     | '/rh/transacoes'
     | '/rh'
+    | '/employee/dashboard'
+    | '/api/auth/login'
+    | '/api/employees/register'
+    | '/api/mobility/compare-costs'
     | '/api/mobility/search'
+    | '/api/mobility/spending-estimate'
     | '/rh/colaboradores/$id'
     | '/rh/colaboradores'
+    | '/employee/spending-estimate/history'
+    | '/employee/spending-estimate'
   id:
     | '__root__'
     | '/'
+    | '/_authenticated'
     | '/planejar'
+    | '/reset-password'
     | '/rh'
+    | '/employee/login'
+    | '/employee/register'
     | '/rh/cashback'
     | '/rh/configuracoes'
     | '/rh/creditos'
@@ -224,16 +348,31 @@ export interface FileRouteTypes {
     | '/rh/relatorios'
     | '/rh/transacoes'
     | '/rh/'
+    | '/_authenticated/employee/dashboard'
+    | '/api/auth/login'
+    | '/api/employees/register'
+    | '/api/mobility/compare-costs'
     | '/api/mobility/search'
+    | '/api/mobility/spending-estimate'
     | '/rh/colaboradores/$id'
     | '/rh/colaboradores/'
+    | '/_authenticated/employee/spending-estimate/history'
+    | '/_authenticated/employee/spending-estimate/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   PlanejarRoute: typeof PlanejarRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   RhRoute: typeof RhRouteWithChildren
+  EmployeeLoginRoute: typeof EmployeeLoginRoute
+  EmployeeRegisterRoute: typeof EmployeeRegisterRoute
+  ApiAuthLoginRoute: typeof ApiAuthLoginRoute
+  ApiEmployeesRegisterRoute: typeof ApiEmployeesRegisterRoute
+  ApiMobilityCompareCostsRoute: typeof ApiMobilityCompareCostsRoute
   ApiMobilitySearchRoute: typeof ApiMobilitySearchRoute
+  ApiMobilitySpendingEstimateRoute: typeof ApiMobilitySpendingEstimateRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -245,6 +384,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/planejar': {
       id: '/planejar'
       path: '/planejar'
@@ -252,11 +398,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PlanejarRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/rh': {
       id: '/rh'
       path: '/rh'
       fullPath: '/rh'
       preLoaderRoute: typeof RhRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/employee/login': {
+      id: '/employee/login'
+      path: '/employee/login'
+      fullPath: '/employee/login'
+      preLoaderRoute: typeof EmployeeLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/employee/register': {
+      id: '/employee/register'
+      path: '/employee/register'
+      fullPath: '/employee/register'
+      preLoaderRoute: typeof EmployeeRegisterRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/rh/': {
@@ -336,11 +503,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RhTransacoesRouteImport
       parentRoute: typeof RhRoute
     }
+    '/_authenticated/employee/dashboard': {
+      id: '/_authenticated/employee/dashboard'
+      path: '/employee/dashboard'
+      fullPath: '/employee/dashboard'
+      preLoaderRoute: typeof AuthenticatedEmployeeDashboardRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/api/auth/login': {
+      id: '/api/auth/login'
+      path: '/api/auth/login'
+      fullPath: '/api/auth/login'
+      preLoaderRoute: typeof ApiAuthLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/employees/register': {
+      id: '/api/employees/register'
+      path: '/api/employees/register'
+      fullPath: '/api/employees/register'
+      preLoaderRoute: typeof ApiEmployeesRegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/mobility/compare-costs': {
+      id: '/api/mobility/compare-costs'
+      path: '/api/mobility/compare-costs'
+      fullPath: '/api/mobility/compare-costs'
+      preLoaderRoute: typeof ApiMobilityCompareCostsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/mobility/search': {
       id: '/api/mobility/search'
       path: '/api/mobility/search'
       fullPath: '/api/mobility/search'
       preLoaderRoute: typeof ApiMobilitySearchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/mobility/spending-estimate': {
+      id: '/api/mobility/spending-estimate'
+      path: '/api/mobility/spending-estimate'
+      fullPath: '/api/mobility/spending-estimate'
+      preLoaderRoute: typeof ApiMobilitySpendingEstimateRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/rh/colaboradores/': {
@@ -357,8 +559,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RhColaboradoresIdRouteImport
       parentRoute: typeof RhRoute
     }
+    '/_authenticated/employee/spending-estimate/': {
+      id: '/_authenticated/employee/spending-estimate/'
+      path: '/employee/spending-estimate'
+      fullPath: '/employee/spending-estimate/'
+      preLoaderRoute: typeof AuthenticatedEmployeeSpendingEstimateIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/employee/spending-estimate/history': {
+      id: '/_authenticated/employee/spending-estimate/history'
+      path: '/employee/spending-estimate/history'
+      fullPath: '/employee/spending-estimate/history'
+      preLoaderRoute: typeof AuthenticatedEmployeeSpendingEstimateHistoryRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
+
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedEmployeeDashboardRoute: typeof AuthenticatedEmployeeDashboardRoute
+  AuthenticatedEmployeeSpendingEstimateHistoryRoute: typeof AuthenticatedEmployeeSpendingEstimateHistoryRoute
+  AuthenticatedEmployeeSpendingEstimateIndexRoute: typeof AuthenticatedEmployeeSpendingEstimateIndexRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedEmployeeDashboardRoute: AuthenticatedEmployeeDashboardRoute,
+  AuthenticatedEmployeeSpendingEstimateHistoryRoute:
+    AuthenticatedEmployeeSpendingEstimateHistoryRoute,
+  AuthenticatedEmployeeSpendingEstimateIndexRoute:
+    AuthenticatedEmployeeSpendingEstimateIndexRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
 interface RhRouteChildren {
   RhCashbackRoute: typeof RhCashbackRoute
@@ -396,9 +629,17 @@ const RhRouteWithChildren = RhRoute._addFileChildren(RhRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   PlanejarRoute: PlanejarRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   RhRoute: RhRouteWithChildren,
+  EmployeeLoginRoute: EmployeeLoginRoute,
+  EmployeeRegisterRoute: EmployeeRegisterRoute,
+  ApiAuthLoginRoute: ApiAuthLoginRoute,
+  ApiEmployeesRegisterRoute: ApiEmployeesRegisterRoute,
+  ApiMobilityCompareCostsRoute: ApiMobilityCompareCostsRoute,
   ApiMobilitySearchRoute: ApiMobilitySearchRoute,
+  ApiMobilitySpendingEstimateRoute: ApiMobilitySpendingEstimateRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
